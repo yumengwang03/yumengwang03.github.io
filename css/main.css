@@ -1,0 +1,67 @@
+
+
+*{
+	padding: 0;
+	margin: 0;
+	background-color: #FAFAFA;
+	font-family: Futura, Arial;
+}
+
+.title h1{
+	text-align: center;
+	margin: 50px;
+	font-size: 3em;
+	color: #3FB;
+}
+
+.menu{
+	text-align: center;
+	margin: 50px;
+}
+
+.menu a {
+	text-decoration: none;
+}
+
+.menu li {
+	display: inline;
+	padding: 0 5%;
+	color: #A8A8A8;
+	font-size: 2em;
+}
+
+.menu li:hover {
+	color: #F7F;
+}
+
+.assignments {
+	padding: 10px 30%;
+}
+
+.assignments ul {
+	list-style-type: none;
+} 
+
+.assignments a {
+	text-decoration: none;
+}
+
+.assignments li {
+	color: #A8A8A8;
+	font-size: 1.6em;
+	text-align: center;
+	color: #FA4;
+}
+
+footer {
+	text-align: center;
+	position:fixed;
+	bottom:20px;
+	left:0;
+	right:0;
+}
+
+footer p {
+	color:#A8A8A8;
+}
+
