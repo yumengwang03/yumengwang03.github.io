@@ -65,3 +65,11 @@ footer p {
 	color:#A8A8A8;
 }
 
+img {
+	width: 80%;
+	height: auto;
+	display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
