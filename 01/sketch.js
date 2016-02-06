@@ -3,68 +3,128 @@ var inkDropList = [];
 
 var angle; //for changing the radius and color smoothly
 
-// //reference: P5.js-Examples-Live Input
-// var input;
-// var analyzer;
-// var volume;
+//for 2d perlin noise
+var xoff;
+//var yoff;
+var growSpeed;
+
+var mouseMode;
+var clearCanvas;
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(0);
 
   angle = 0;
+  xoff = 0;
+  //yoff = 0;
+  growSpeed = -1.5;
+  mouseMode = false;
+  clearCanvas = false;
 
   for (var i = 0; i < 160; i++) {
     inkDropList.push(new InkDrop());
   }
-
-  // mic = new p5.AudioIn();
-  // mic.start();
 }
 
 function draw() {
-  //background(255);
-  for (var j = 0; j < inkDropList.length; j++) {
-    inkDropList[j].display();
+  if (mouseMode) {
+    for (var i = 0; i < inkDropList.length; i++) {
+      inkDropList[i].controlMouse();
+      inkDropList[i].move();
+      inkDropList[i].display();
+    }
+  } else {
+    for (var i = 0; i < inkDropList.length; i++) {
+      inkDropList[i].controlGrow();
+      inkDropList[i].move();
+      inkDropList[i].display();
+    }
   }
-  //volume = mic.getLevel();
+  
+  if (clearCanvas) {
+    background(0);
+    clearCanvas = false;
+  }
+  console.log(clearCanvas);
+}
 
+function keyTyped() {
+  if (key === 'm') {
+    mouseMode = true;
+  } else if (key === 'g') {
+    mouseMode = false;
+  }
+  return false; // prevent any default behavior
 }
 
 function mousePressed() {
-  background(255);
+  clearCanvas = true;
+}
+
+function InkDropTrack() {
+  var inkDropList0 = [];
+  this.update = function() {
+    for (var i = 0; i < inkDropList.length; i++) {
+      inkDropList[i].controlGrow();
+      inkDropList[i].move();
+      inkDropList[i].display();
+    }
+  };
 }
 
 function InkDrop() {
-  var loc = createVector(30, 30);
-  var dropSize = random(8, 14);
-  var origin = createVector(30, 30);
+  var dropSize = 8;
+  var origin = createVector(0, windowHeight);
+  var loc = createVector(0, 0);
+  var ploc = createVector(0, 0);
+  var radius = 0;
 
-  this.display = function() {
-    noStroke();
-    //fill(random(20, 160), 20, 255, 40);
-    //var radius = 50;
-    var radius = abs(60 * sin(angle));
-    var redPoints = map(radius, 0, 50, 80, 235);
-    var greenPoints = map(radius, 0, 50, 20, 20);
-    var bluePoints = map(radius, 0, 50, 255, 235);
-    angle += 0.0001;
-    fill(redPoints, greenPoints, bluePoints, 40);
-    //console.log(radius);
-    //origin.x = mouseX;
+  this.controlMouse = function() {
     origin.x = mouseX;
     origin.y = mouseY;
+  };
+
+  this.controlGrow = function() {
+    xoff += random(0.000001, 0.00003);
+    origin.x = noise(xoff) * windowWidth;
+
+    origin.y += growSpeed;
+    growSpeed += random(-0.01, 0.01);
+    if (origin.y - radius <= 0 || origin.y + radius >= windowHeight) {
+      growSpeed *= -1;
+    }
+  };
+
+  this.move = function() {
+    // radius = abs(60 * sin(angle));
+    radius = abs(50 * sin(angle));
+    angle += 0.0001;
+
+    ploc.x = loc.x;
+    ploc.y = loc.y;
 
     loc.x = random(origin.x - 2 * radius, origin.x + 2 * radius);
     loc.y = random(origin.y - 2 * radius, origin.y + 2 * radius);
+  };
+
+  this.display = function() {
+    //noStroke();
+    stroke(0,0,0,50);
+    strokeWeight(0.7);
+    // var redPoints = map(radius, 0, 50, 80, 235);
+    // var greenPoints = map(radius, 0, 50, 20, 20);
+    // var bluePoints = map(radius, 0, 50, 255, 235);
+    var redPoints = map(radius, 0, 50, 120, 255);
+    var greenPoints = map(radius, 0, 50, 15, 120);
+    var bluePoints = map(radius, 0, 50, 15, 120);
+    fill(redPoints, greenPoints, bluePoints, 40);
 
     var divider = dist(loc.x, loc.y, origin.x, origin.y);
-
     var particleSize = map(divider, 0, radius, dropSize, 1);
-
     if (divider <= radius) {
-      //ellipse(loc.x, loc.y, particleSize, particleSize);
-      rect(loc.x + random(-3, 3), loc.y + random(-3, 3), particleSize + random(-2, 2), particleSize + random(-2, 2));
+      //rect(loc.x + random(-3, 3), loc.y + random(-3, 3), particleSize + random(-2, 2), particleSize + random(-2, 2));
       polygon(loc.x, loc.y, particleSize, int(random(3, 12)));
     }
   };
