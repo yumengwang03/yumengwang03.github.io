@@ -53,6 +53,10 @@
 	color: #FA4;
 }
 
+.assignments li:hover {
+	color: #F7F;
+}
+
 footer {
 	text-align: center;
 	position:fixed;
