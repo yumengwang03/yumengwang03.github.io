@@ -5,7 +5,6 @@ var angle; //for changing the radius and color smoothly
 
 //for 2d perlin noise
 var xoff;
-//var yoff;
 var growSpeed;
 
 var mouseMode;
@@ -18,7 +17,6 @@ function setup() {
 
   angle = 0;
   xoff = 0;
-  //yoff = 0;
   growSpeed = -1.5;
   mouseMode = false;
   clearCanvas = false;
@@ -42,18 +40,26 @@ function draw() {
       inkDropList[i].display();
     }
   }
-  
+
   if (clearCanvas) {
     background(0);
     clearCanvas = false;
   }
-  console.log(clearCanvas);
+
+  textSize(14);
+  fill(245);
+  strokeWeight(0.5);
+  text("g - self-grow", 10, 20);
+  text("m - mouse control", 10, 40);
+  text("click - clear", 10, 60);
 }
 
 function keyTyped() {
   if (key === 'm') {
+    clearCanvas = true;
     mouseMode = true;
   } else if (key === 'g') {
+    clearCanvas = true;
     mouseMode = false;
   }
   return false; // prevent any default behavior
@@ -63,16 +69,6 @@ function mousePressed() {
   clearCanvas = true;
 }
 
-function InkDropTrack() {
-  var inkDropList0 = [];
-  this.update = function() {
-    for (var i = 0; i < inkDropList.length; i++) {
-      inkDropList[i].controlGrow();
-      inkDropList[i].move();
-      inkDropList[i].display();
-    }
-  };
-}
 
 function InkDrop() {
   var dropSize = 8;
@@ -92,7 +88,18 @@ function InkDrop() {
 
     origin.y += growSpeed;
     growSpeed += random(-0.01, 0.01);
+
+    constrain(growSpeed, -2.2, 2.2);
+    //console.log(growSpeed);
+
+    if (origin.y - 1.5 * radius <= 0 && origin.y - radius > 0) {
+      growSpeed += 0.06;
+    } else if (origin.y + 1.5 * radius >= windowHeight && origin.y + radius < windowHeight) {
+      growSpeed -= 0.06;
+    }
+
     if (origin.y - radius <= 0 || origin.y + radius >= windowHeight) {
+      growSpeed = -1.5;
       growSpeed *= -1;
     }
   };
@@ -111,14 +118,14 @@ function InkDrop() {
 
   this.display = function() {
     //noStroke();
-    stroke(0,0,0,50);
+    stroke(0, 0, 0, 50);
     strokeWeight(0.7);
-    // var redPoints = map(radius, 0, 50, 80, 235);
-    // var greenPoints = map(radius, 0, 50, 20, 20);
-    // var bluePoints = map(radius, 0, 50, 255, 235);
-    var redPoints = map(radius, 0, 50, 120, 255);
-    var greenPoints = map(radius, 0, 50, 15, 120);
-    var bluePoints = map(radius, 0, 50, 15, 120);
+    var redPoints = map(radius, 0, 50, 80, 235);
+    var greenPoints = map(radius, 0, 50, 20, 20);
+    var bluePoints = map(radius, 0, 50, 255, 235);
+    // var redPoints = map(radius, 0, 50, 120, 255);
+    // var greenPoints = map(radius, 0, 50, 15, 120);
+    // var bluePoints = map(radius, 0, 50, 15, 120);
     fill(redPoints, greenPoints, bluePoints, 40);
 
     var divider = dist(loc.x, loc.y, origin.x, origin.y);
