@@ -120,12 +120,12 @@ function InkDrop() {
     //noStroke();
     stroke(0, 0, 0, 50);
     strokeWeight(0.7);
-    var redPoints = map(radius, 0, 50, 80, 235);
-    var greenPoints = map(radius, 0, 50, 20, 20);
-    var bluePoints = map(radius, 0, 50, 255, 235);
-    // var redPoints = map(radius, 0, 50, 120, 255);
-    // var greenPoints = map(radius, 0, 50, 15, 120);
-    // var bluePoints = map(radius, 0, 50, 15, 120);
+    // var redPoints = map(radius, 0, 50, 80, 235);
+    // var greenPoints = map(radius, 0, 50, 20, 20);
+    // var bluePoints = map(radius, 0, 50, 255, 235);
+    var redPoints = map(radius, 0, 50, 120, 255);
+    var greenPoints = map(radius, 0, 50, 15, 120);
+    var bluePoints = map(radius, 0, 50, 15, 120);
     fill(redPoints, greenPoints, bluePoints, 40);
 
     var divider = dist(loc.x, loc.y, origin.x, origin.y);
