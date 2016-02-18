@@ -38,7 +38,8 @@ function draw() {
   adjA = categorize(txtA).adj;
   advA = categorize(txtA).adv;
   theA = categorize(txtA).the;
-  //console.log(nounA.length);
+  
+  console.log(nounA);
 
   inherit(nounA);
 
@@ -91,31 +92,31 @@ function inherit(property) {
   var characters;
 
 
-  for (var i = 0; i < property.length; i++) {
-    characters = property[0].split('');
-    characters.sort();
-    //console.log(characters);
+  // for (var i = 0; i < property.length; i++) {
+  //   characters = property[0].split('');
+  //   characters.sort();
+  //   //console.log(characters);
 
-    for (var j = 0; j < characters.length; j++) {
+  //   for (var j = 0; j < characters.length; j++) {
 
-      if (characters[j] === characters[j - 1]) {
-        //console.log(true);
-        // if (dominant.match(property[0]) == null) {
-        //   dominant.push(property[0]);
-        // }
-      } else {
-        //console.log(false);
-        // if (matchAll(recessive, property[0]) === property[0]) {
-        //   recessive.push(property[0]);
-        // }
-        if (recessive.match(property[0]) !== property[0]) {
-          recessive.push(property[0]);
-        }
-      }
-    }
-  }
+  //     if (characters[j] === characters[j - 1]) {
+  //       //console.log(true);
+  //       // if (dominant.match(property[0]) == null) {
+  //       //   dominant.push(property[0]);
+  //       // }
+  //     } else {
+  //       //console.log(false);
+  //       // if (matchAll(recessive, property[0]) === property[0]) {
+  //       //   recessive.push(property[0]);
+  //       // }
+  //       if (recessive.match(property[0]) !== property[0]) {
+  //         recessive.push(property[0]);
+  //       }
+  //     }
+  //   }
+  // }
   //console.log(matchAll(recessive, "hello"));
-  console.log(recessive);
+  //console.log(recessive);
 
 
 }
