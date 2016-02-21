@@ -6,13 +6,8 @@ var txtA;
 var txtBraw;
 var txtB;
 
-var nounA = {};
-var verbA = {};
-var adjA = {};
-var advA = {};
-var theA = {};
+var inputA, inputB, button;
 
-var babyText;
 
 // a trick for loadStrings, according to http://shiffman.github.io/A2Z-F15/week2/notes.html
 // "loadStrings" loads the string as a string array
@@ -23,25 +18,77 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(500, 500);
-  textFont('times', 16);
-  textAlign(LEFT);
+  createCanvas(windowWidth, windowHeight + 400);
+
+  inputA = createInput();
+  inputB = createInput();
+  inputA.position(windowWidth / 4 - 150, 360);
+  inputB.position(3 * windowWidth / 4 - 250, 360);
+  inputA.size(360, 100);
+  inputB.size(360, 100);
+
+  button = createButton('Make a Baby');
+  button.position(windowWidth/2-75, 390);
+  button.size (100, 50);
+  button.mousePressed(generate);
 
   txtA = join(txtAraw, '\n');
   txtB = join(txtBraw, '\n');
 
 }
 
+var counter = 0; // to avoid drawing text for multiple times
 function draw() {
-  nounA = categorize(txtA).noun;
-  verbA = categorize(txtA).verb;
-  adjA = categorize(txtA).adj;
-  advA = categorize(txtA).adv;
-  theA = categorize(txtA).the;
-  
-  console.log(nounA);
+  if (counter < 1) {
 
-  inherit(nounA);
+    textFont('Courier', 30);
+    fill(255, 100, 180);
+    text("Parent A", windowWidth / 4 - 150, 20, 500, 300);
+    fill(90, 130, 255);
+    text("Parent B", 3 * windowWidth / 4 - 250, 20, 500, 300);
+    fill(255, 230, 100);
+    text("Baby", windowWidth / 2 - 200, 520, 400, 200);
+
+
+    fill(0);
+    textFont('Courier', 16);
+    text(txtA, windowWidth / 4 - 150, 100, 400, 300);
+    text(txtB, 3 * windowWidth / 4 - 250, 100, 400, 300);
+
+    // for verb conjugation
+    // var args = {
+    //   tense: RiTa.PAST_TENSE,
+    //   number: RiTa.SINGULAR,
+    //   person: RiTa.THIRD_PERSON
+    // };
+
+    var nounA = categorize(txtA).noun;
+    var verbA = categorize(txtA).verb;
+    var adjA = categorize(txtA).adj;
+    var advA = categorize(txtA).adv;
+    var theA = categorize(txtA).the;
+
+    var nounB = categorize(txtB).noun;
+    var verbB = categorize(txtB).verb;
+    var adjB = categorize(txtB).adj;
+    var advB = categorize(txtB).adv;
+    var theB = categorize(txtB).the;
+    //console.log(verbA);
+
+    var babyNoun = inherit(nounA, nounB);
+    var babyVerb = inherit(verbA, verbB);
+    var babyAdj = inherit(adjA, adjB);
+    var babyAdv = inherit(advA, advB);
+    var babyThe = inherit(theA, theB);
+    //console.log(babyNoun);
+
+    var babyText = babyAssemble(babyNoun, babyVerb, babyAdj, babyAdv, babyThe);
+    var fullBaby = join(babyText, " ");
+    //console.log(fullBaby);
+    text(fullBaby, windowWidth / 2 - 200, 600, 400, 200);
+
+    counter++;
+  }
 
 }
 
@@ -57,9 +104,6 @@ function categorize(txt) {
   var pos = RiTa.getPosTags(txt);
 
   for (var i = 0; i < pos.length; i++) {
-    //   pair[i] = pos[i] + "," + token[i];
-    //   pairsub[i] = pair[i].substring(0, 2);
-
     // categorize tokens according to PENN part-of-speech list, https://rednoise.org/rita/reference/PennTags.html
     if (pos[i] == "nn" || pos[i] == "pr") {
       noun.push(token[i]);
@@ -80,43 +124,127 @@ function categorize(txt) {
     adv: adv,
     the: the
   };
-
   return pile;
 }
 
-var counter = 0;
+function inherit(propertyA, propertyB) {
+  var babyGene = [];
+  var babyLength;
 
-function inherit(property) {
-  var recessive = [];
-  var dominant = [];
-  var characters;
+  if (propertyA.length >= propertyB.length) {
+    babyLength = propertyB.length;
+  } else {
+    babyLength = propertyA.length;
+  }
 
+  for (var i = 0; i < babyLength; i++) {
+    var duplicatedNumA = check(propertyA[i]);
+    var duplicatedNumB = check(propertyB[i]);
+    //console.log(duplicatedNumA);
 
-  // for (var i = 0; i < property.length; i++) {
-  //   characters = property[0].split('');
-  //   characters.sort();
-  //   //console.log(characters);
+    if (duplicatedNumA > 1 && duplicatedNumB <= 1) {
+      babyGene.push(propertyA[i]);
+    } else if (duplicatedNumA > 1 && duplicatedNumB > 1) {
+      babyGene.push(propertyA[i]);
+    } else if (duplicatedNumA <= 1 && duplicatedNumB <= 1) {
+      babyGene.push(propertyB[i]);
+    } else if (duplicatedNumA <= 1 && duplicatedNumB > 1) {
+      babyGene.push(propertyB[i]);
+    }
+  }
 
-  //   for (var j = 0; j < characters.length; j++) {
+  return babyGene;
+}
 
-  //     if (characters[j] === characters[j - 1]) {
-  //       //console.log(true);
-  //       // if (dominant.match(property[0]) == null) {
-  //       //   dominant.push(property[0]);
-  //       // }
-  //     } else {
-  //       //console.log(false);
-  //       // if (matchAll(recessive, property[0]) === property[0]) {
-  //       //   recessive.push(property[0]);
-  //       // }
-  //       if (recessive.match(property[0]) !== property[0]) {
-  //         recessive.push(property[0]);
-  //       }
-  //     }
-  //   }
-  // }
-  //console.log(matchAll(recessive, "hello"));
-  //console.log(recessive);
+// reference this example: http://stackoverflow.com/questions/6176684/how-to-determine-if-a-string-contains-a-sequence-of-repeated-letters
+function check(checkStr) {
+  var duplicate = {}; //list of each letter's duplication 
+  var result = 0;
 
+  for (var i = checkStr.length; i >= 0; i--) {
+    var letter = checkStr.charAt(i);
+    if (letter in duplicate) {
+      duplicate[letter] += 1;
+    } else {
+      duplicate[letter] = 1;
+    }
+  }
+  for (letter in duplicate) {
+    if (duplicate.hasOwnProperty(letter)) {
+      if (duplicate[letter] > 1) {
+        result = duplicate[letter];
+      }
+    }
+  }
+  return result;
+}
+
+function babyAssemble(bNoun, bVerb, bAdj, bAdv, bThe) {
+  var babyText = [];
+  for (var i = 0; i < bNoun.length / 2; i++) {
+    babyText.push(bNoun[2 * i]);
+    if (i < bAdv.length) {
+      babyText.push(bAdv[i]);
+    }
+    if (i < bVerb.length) {
+      babyText.push(bVerb[i]);
+    }
+    if (i < bThe.length) {
+      babyText.push(bThe[i]);
+    }
+    if (i < bAdj.length) {
+      babyText.push(bAdj[i]);
+    }
+    babyText.push(bNoun[2 * i + 1] + ".");
+  }
+  return babyText;
+}
+
+// another inherit fucntion to determine recessive and dominat genes
+// function inherit(property) {
+//   var recessive = [];
+//   var dominant = [];
+
+//   for (var i = 0; i < property.length; i++) {
+//     var duplicatedNum = check(property[i]);
+//     if (duplicatedNum > 1) {
+//       dominant.push(property[i]);
+//     } else {
+//       recessive.push(property[i]);
+//     }
+
+//   }
+//   var genes = {
+//     dominant: dominant,
+//     recessive: recessive
+//   };
+//   return genes;
+// }
+
+function generate() {
+  var pnounA = categorize(inputA.value()).noun;
+  var pverbA = categorize(inputA.value()).verb;
+  var padjA = categorize(inputA.value()).adj;
+  var padvA = categorize(inputA.value()).adv;
+  var ptheA = categorize(inputA.value()).the;
+
+  var pnounB = categorize(inputB.value()).noun;
+  var pverbB = categorize(inputB.value()).verb;
+  var padjB = categorize(inputB.value()).adj;
+  var padvB = categorize(inputB.value()).adv;
+  var ptheB = categorize(inputB.value()).the;
+  //console.log(verbA);
+
+  var babyNoun = inherit(pnounA, pnounB);
+  var babyVerb = inherit(pverbA, pverbB);
+  var babyAdj = inherit(padjA, padjB);
+  var babyAdv = inherit(padvA, padvB);
+  var babyThe = inherit(ptheA, ptheB);
+  //console.log(babyNoun);
+
+  var newBabyText = babyAssemble(babyNoun, babyVerb, babyAdj, babyAdv, babyThe);
+  var newFullBaby = join(newBabyText, " ");
+  //console.log(fullBaby);
+  text(newFullBaby, windowWidth / 2 - 200, 760, 400, 200);
 
 }
