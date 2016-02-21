@@ -22,19 +22,22 @@ function setup() {
 
   inputA = createInput();
   inputB = createInput();
-  inputA.position(windowWidth / 4 - 150, 360);
-  inputB.position(3 * windowWidth / 4 - 250, 360);
+  inputA.position(windowWidth / 4 - 140, 520);
+  inputB.position(3 * windowWidth / 4 - 240, 520);
   inputA.size(360, 100);
   inputB.size(360, 100);
 
   button = createButton('Make a Baby');
-  button.position(windowWidth/2-75, 390);
+  button.position(windowWidth/2-60, 550);
   button.size (100, 50);
   button.mousePressed(generate);
 
   txtA = join(txtAraw, '\n');
   txtB = join(txtBraw, '\n');
-
+  
+  // textFont('Courier', 16);
+  // fill(50);
+  // text()
 }
 
 var counter = 0; // to avoid drawing text for multiple times
