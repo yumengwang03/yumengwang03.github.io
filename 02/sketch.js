@@ -8,7 +8,6 @@ var txtB;
 
 var inputA, inputB, button;
 
-
 // a trick for loadStrings, according to http://shiffman.github.io/A2Z-F15/week2/notes.html
 // "loadStrings" loads the string as a string array
 // use "join" to put them back into a gian string
@@ -22,22 +21,18 @@ function setup() {
 
   inputA = createInput();
   inputB = createInput();
-  inputA.position(windowWidth / 4 - 140, 520);
-  inputB.position(3 * windowWidth / 4 - 240, 520);
+  inputA.position(windowWidth / 4 - 140, 560);
+  inputB.position(3 * windowWidth / 4 - 240, 560);
   inputA.size(360, 100);
   inputB.size(360, 100);
 
   button = createButton('Make a Baby');
-  button.position(windowWidth/2-60, 550);
+  button.position(windowWidth/2-60, 590);
   button.size (100, 50);
   button.mousePressed(generate);
 
   txtA = join(txtAraw, '\n');
   txtB = join(txtBraw, '\n');
-  
-  // textFont('Courier', 16);
-  // fill(50);
-  // text()
 }
 
 var counter = 0; // to avoid drawing text for multiple times
@@ -76,7 +71,7 @@ function draw() {
     var adjB = categorize(txtB).adj;
     var advB = categorize(txtB).adv;
     var theB = categorize(txtB).the;
-    //console.log(verbA);
+    //console.log(nounB);
 
     var babyNoun = inherit(nounA, nounB);
     var babyVerb = inherit(verbA, verbB);
