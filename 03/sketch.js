@@ -1,4 +1,5 @@
-// a button tetris game
+// a button tetris game that can write poems
+
 // reference: Bryan's example 13-OOP-plus-DOM 
 // https://github.com/whoisbma/Code-2-SP16/tree/master/week-03-OOP-DOM/13-OOP-plus-DOM
 
@@ -6,23 +7,48 @@ var block = [];
 
 var buttonTags = [];
 
+// to limit the number of buttons per row
+var gameWidth;
+// the number of words that go to each line
+var poemL;
+
+var newBorn;
+
+// var occupied = [];
+
 
 function setup() {
-  noCanvas();
+  //noCanvas();
+  // to create a canvas to draw the grid in the background
+  poemL = 14;
+  gameWidth = (poemL - 3) * 50;
+  createCanvas(poemL * 50, windowHeight);
+  newBorn = false;
   for (var i = 0; i < 1; i++) {
     block[i] = new ButtonBlock();
   }
+  // // a 2d boolean array to check if the space is occupied 
+  // for (var p = 0; p < gameWidth/50; p++) {
+  //   for (var q = 0; q < 6; q++) {
+  //     occupied[p, q] = false;
+  //   }
+  // }
 }
 
 function draw() {
+  gridCheck();
   for (var i = 0; i < block.length; i++) {
     block[i].move();
+  }
+  if (newBorn) {
+    var newB = new ButtonBlock();
+    block.push(newB);
   }
 }
 
 function mousePressed() {
-  var newB = new ButtonBlock();
-  block.push(newB);
+  // var newB = new ButtonBlock();
+  // block.push(newB);
 }
 
 
@@ -38,6 +64,7 @@ function ButtonBlock() {
         this.buttons[i].update();
         this.buttons[i].display();
         this.buttons[i].stop();
+        this.buttons[i].occupy();
       }
     }
   }
@@ -46,7 +73,7 @@ function ButtonBlock() {
 
 function ButtonPattern(pattern) {
   this.size = createVector(50, 50);
-  this.origin = createVector(random(windowWidth - 100), 0);
+  this.origin = createVector(floor(random(0, floor(gameWidth / this.size.x))) * this.size.x, 0);
   this.vel = 2;
 
   // Tetris blocks based on 4 units
@@ -112,6 +139,7 @@ function ButtonPattern(pattern) {
   this.p7 = [this.origin, this.p7_1, this.p7_2, this.p7_3];
 
   this.display = function() {
+    newBorn = false;
     for (var i = 0; i < this.b4.length; i++) {
       this.b4[i].size(this.size.x, this.size.y);
       switch (pattern) {
@@ -172,15 +200,51 @@ function ButtonPattern(pattern) {
       }
     }
   };
-  
+
   this.stop = function() {
     if (this.origin.y >= windowHeight - this.size.y) {
-      this.vel = 0;
+      this.vel = 0
+      newBorn = true;
+    }
+  };
+
+  this.occupy = function() {
+    for (var p = 0; p < poemL; p++) {
+      for (var q = 0; q < 5; q++) {
+        //occupied[p, q] = false;
+        checkW = this.size.x * p;
+        checkH = windowHeight - this.size.y * (q + 1);
+        rect(checkW, checkH, this.size.x, this.size.y);
+
+        //check each pattern
+        //this.p1 = [this.origin, this.p1_1, this.p1_2, this.p1_3];
+        for (var m = 0; m < this.p1.length; m++) {
+          if (this.p1[m].y >= checkH - this.size.y && this.p1[m].x <= checkW + this.size.x && this.p1[m].x > checkW + 3 * this.size.x) {
+            occupied[p, q] = true;
+
+            //this.vel = 0;
+          }
+
+          // if (occupied[p, q + 1]) {
+          //   //console.log("occupied");
+          //   //this.vel = 0;
+          // }
+        }
+        //console.log(occupied);
+      }
     }
   };
 }
 
-
-
-
-
+function gridCheck() {
+  // detect collision
+  var occupied = [];
+  // a 2d boolean array to check if the space is occupied 
+  for (var p = 0; p < 5; p++) {
+    occupied[p] = [];
+    for (var q = 0; q < poemL; q++) {
+      occupied[p][q] = false;
+      //console.log(occupied);
+    }
+  }
+}
