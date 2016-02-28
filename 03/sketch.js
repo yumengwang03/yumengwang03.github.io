@@ -97,7 +97,7 @@ function Water(word) {
   this.water.class('waterUnit');
 
   this.update = function() {
-    this.loc.x = this.s * sin(this.angle) + 0.688 * windowWidth;
+    this.loc.x = this.s * sin(this.angle) + 0.7 * windowWidth;
     this.loc.y = this.s * cos(this.angle) + windowHeight / 2 - 50;
     this.angle += 0.01;
     this.s -= 0.1;
