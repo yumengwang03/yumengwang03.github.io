@@ -169,7 +169,7 @@ function buttonPressed() {
       pouringWater.show();
     }
   }
-  console.log(this.value);
+  //console.log(this.value);
 }
 
 function addTitle() {
