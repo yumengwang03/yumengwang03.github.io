@@ -1,5 +1,9 @@
 //reference: Bryan's week-3 16-string-input
 
+//questions
+//1. how to clear textarea on click
+//2. seems like the first element in outputTxt array (first word in whirlpool) doesn't get removed? 
+
 var whirlpool = [];
 var start;
 var order;
@@ -7,9 +11,6 @@ var time;
 var limit;
 
 var textInput;
-var outcome;
-
-var token = [];
 var outputTxt = [];
 
 var button;
@@ -25,16 +26,18 @@ function setup() {
   order = 0;
 
   pouringWater = createImg("assets/water.png");
-  pouringWater.position(720, 465);
-  pouringWater.size(60, 120);
+  pouringWater.position(0.499 * windowWidth, 0.31 * windowWidth);
+  pouringWater.size(0.0417 * windowWidth, 0.083 * windowWidth);
   pouringWater.hide();
 
   waterImg = createImg("assets/water-system.png");
-  waterImg.position(40, 20);
+  waterImg.position(0.0278* windowWidth, 0,0139*windowWidth);
+  waterImg.size(0.576 * windowWidth, 0.507 * windowWidth);
 
-  textInput = createElement('textarea', 'Copy your text into the water tank and open the faucet.');
-  textInput.size(320, 220);
-  textInput.position(140, 140);
+  textInput = createElement('textarea', "Copy your text (preferably longer than 50 words) into the water tank and open the faucet.");
+  textInput.size(0.222 * windowWidth, 0.153 * windowWidth);
+  textInput.position(0.097 * windowWidth, 0.097 * windowWidth);
+  textInput.mousePressed(addTitle);
   textInput.style('background', '#e6eef6');
   textInput.style('border', '1px dotted #cfcfcf');
   textInput.style('font-family', 'Avenir');
@@ -42,12 +45,12 @@ function setup() {
   textInput.style('outline', 'none');
   textInput.style('resize', 'none');
 
-  outcome = createP("");
   textInput.input(processText);
 
   button = createButton('open');
   button.mousePressed(buttonPressed);
-  button.position(615, 520);
+  button.position(0.422 * windowWidth, 0.356 * windowWidth);
+  button.size(0.04 * windowWidth, 0.02 * windowWidth);
   button.style('font-size', '16px');
   button.style('background', '#b4b4b4');
   button.style('border', 'none');
@@ -73,6 +76,7 @@ function draw() {
       }
     }
   }
+  //console.log(start);
 }
 
 function addWater() {
@@ -93,7 +97,7 @@ function Water(word) {
   this.water.class('waterUnit');
 
   this.update = function() {
-    this.loc.x = this.s * sin(this.angle) + 990;
+    this.loc.x = this.s * sin(this.angle) + 0.688 * windowWidth;
     this.loc.y = this.s * cos(this.angle) + windowHeight / 2 - 50;
     this.angle += 0.01;
     this.s -= 0.1;
@@ -120,10 +124,8 @@ function processText() {
   var adv = [];
   var the = [];
 
-  token = RiTa.tokenize(baseTxt);
+  var token = RiTa.tokenize(baseTxt);
   var pos = RiTa.getPosTags(baseTxt);
-
-  console.log(token);
 
   for (var i = 0; i < pos.length; i++) {
     if (pos[i] == "nn" || pos[i] == "pr") {
@@ -140,30 +142,40 @@ function processText() {
     }
   }
 
-  outputTxt = token;
   for (var i = 0; i < noun.length; i++) {
-    //outputTxt.push()
-    // outputTxt.push(noun[random(2 * i)]);
-    // if (i < adv.length) {
-    //   outputTxt.push(adv[random(i)]);
-    // }
-    // if (i < verb.length) {
-    //   outputTxt.push(verb[random(i)]);
-    // }
-    // if (i < the.length) {
-    //   outputTxt.push(the[random(i)]);
-    // }
-    // if (i < adj.length) {
-    //   outputTxt.push(adj[random(i)]);
-    // }
-    // outputTxt.push(noun[random(2 * i + 1)] + ".");
+    outputTxt.push(noun[floor(random(2 * i))]);
+    if (i < adv.length) {
+      outputTxt.push(adv[floor(random(i))]);
+    }
+    if (i < verb.length) {
+      outputTxt.push(verb[floor(random(i))]);
+    }
+    if (i < the.length) {
+      outputTxt.push(the[floor(random(i))]);
+    }
+    if (i < adj.length) {
+      outputTxt.push(adj[floor(random(i))]);
+    }
+    outputTxt.push(noun[floor(random(2 * i + 1))] + ".");
   }
   //console.log(outputTxt);
-
 
 }
 
 function buttonPressed() {
-  start = true;
-  pouringWater.show();
+  for (var i = 0; i < outputTxt.length; i++) {
+    if (outputTxt[i] != undefined) {
+      start = true;
+      pouringWater.show();
+    }
+  }
+  console.log(this.value);
+}
+
+function addTitle() {
+  //console.log("lala");
+  var title = createElement('h1', 'liquid words');
+  title.position(windowWidth - 250, 0);
+  title.style('font-family', 'Avenir');
+  title.style('color', '#7494ff');
 }
