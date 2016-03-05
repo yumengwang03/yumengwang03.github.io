@@ -12,7 +12,7 @@ var test;
 
 function setup() {
   noCanvas();
-  column = 12;
+  column = 18;
   row = 8;
   blockPos = createVector(0, 0);
   blockSize = 60;
@@ -54,9 +54,9 @@ function draw() {
     player.jump();
     moved = false;
   }
-  
+
   player.display();
-  
+
 }
 
 // function keyPressed() {
@@ -124,7 +124,7 @@ function drawSyl() {
         sylBlocks[i][j] = 1;
       }
       //complex words (more than 3 syllables) will create the path in createBlock()
-      if (sylBlocks[i][j] >= 3) {
+      if (sylBlocks[i][j] >= 2) {
         sylOccupied[i][j] = false;
       } else {
         sylOccupied[i][j] = true;
@@ -165,8 +165,8 @@ function createBlock() {
         //blocks[i+1][j] = createDiv(sylArray[i+1][j]);
         blocks[i][j].style('height', blockSize + 'px');
         blocks[i][j].style('width', blockSize + 'px');
-        blockPos.x = blockSize * i;
-        blockPos.y = blockSize * j;
+        blockPos.x = blockSize * i + (windowWidth - blockSize * column) / 2;
+        blockPos.y = blockSize * j + 100;
         blocks[i][j].position(blockPos.x, blockPos.y);
         blocks[i][j].style('background', 'pink');
         blocks[i][j].style('font-family', 'Monospace');
@@ -184,6 +184,7 @@ function Player() {
   this.startPoint = [];
   this.input = createElement('textarea', 'la');
   var distance = [];
+  var inputSyl;
 
   //randomly choose an empty block at the bottom row to start
   for (var i = 0; i < column; i++) {
@@ -191,27 +192,10 @@ function Player() {
       this.startPoint.push(i);
     }
   }
-  var playerPos = createVector(this.startPoint[Math.floor(Math.random() * this.startPoint.length)] * blockSize, (row - 1) * blockSize);
-  //console.log(this.playerPos);
-
-  this.update = function() {
-    //console.log(moveU);
-    this.input.mousePressed(this.moving);
-    console.log(moved);
-    //this.analyze();
-    if (moveU) {
-      console.log("go up");
-      //console.log(this.pathOccupied);
-    }
-  }
-  
-  this.moving = function() {
-    moved = true;
-  }
+  var playerPos = createVector(this.startPoint[Math.floor(Math.random() * this.startPoint.length)] * blockSize + (windowWidth - blockSize * column) / 2, (row - 1) * blockSize + 100);
 
   this.analyze = function() {
     this.empty = [];
-    
     //console.log(this.value());
     for (var i = 0; i < column; i++) {
       for (var j = 0; j < row; j++) {
@@ -220,30 +204,46 @@ function Player() {
         }
       }
     }
-    //console.log(playerPos);
+    distance.push(40);
     for (var i = 0; i < this.empty.length; i++) {
-      // if (playerPos.x == this.empty[i][0] * blockSize && playerPos.y != this.empty[i][1] * blockSize) {
-      if (playerPos.x == this.empty[i][0] * blockSize) {
-        distance.push(this.empty[i][1] * blockSize);
-
+      if (playerPos.x == this.empty[i][0] * blockSize + (windowWidth - blockSize * column) / 2) {
+        distance.push(this.empty[i][1] * blockSize + 100);
       }
     }
     //console.log(distance);
   }
 
+  this.sylAnalyze = function() {
+    this.inputStresses = RiTa.getStresses(this.value()).split('/');
+    inputSyl = this.inputStresses.length;
+    //console.log(inputSyl);
+
+  }
+
+  this.update = function() {
+    this.input.changed(this.moving);
+    this.input.changed(this.sylAnalyze);
+    //console.log(moved);
+  }
+
+  this.moving = function() {
+    moved = true;
+  }
+
   this.jump = function() {
-    var lastIndex = distance.length - 1;
-    //console.log(distance.length);
-    if (playerPos.y >= distance[lastIndex]) {
-      playerPos.y = distance[lastIndex - 1];
-      //this.distance[lastIndex].remove();
-      distance.splice(lastIndex, 1);
-      //distance[lastIndex-1].remove();
+    this.lastIndex = distance.length - 1;
+    //console.log(inputSyl);
+    var distUnit = (playerPos.y - distance[this.lastIndex - 1]) / blockSize;
+    //console.log(distUnit);
+    if (playerPos.y >= distance[this.lastIndex] && distUnit == inputSyl) {
+      playerPos.y = distance[this.lastIndex - 1];
+      distance.splice(this.lastIndex, 1);
     }
-    //this.distance.slice(this.distance.length-2, 1);
-    //playerPos.y = 20;
     console.log(distance);
-    console.log(playerPos.y);
+    if (distance.length == 1) {
+      console.log("succeeded!");
+    }
+    //console.log(playerPos.y);
 
   }
 
