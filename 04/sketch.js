@@ -237,7 +237,7 @@ function Player() {
     if (playerPos.y >= distance[lastIndex]) {
       playerPos.y = distance[lastIndex - 1];
       //this.distance[lastIndex].remove();
-      //distance.splice(lastIndex, 1);
+      distance.splice(lastIndex, 1);
       //distance[lastIndex-1].remove();
     }
     //this.distance.slice(this.distance.length-2, 1);
