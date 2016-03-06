@@ -45,6 +45,7 @@ function setup() {
   textInput.style('outline', 'none');
   textInput.style('resize', 'none');
 
+
   textInput.input(processText);
 
   button = createButton('open');
@@ -69,14 +70,19 @@ function draw() {
     for (var i = 0; i < whirlpool.length; i++) {
       whirlpool[i].update();
       whirlpool[i].display();
+      console.log(whirlpool.length);
 
       if (whirlpool.length > limit) {
-        whirlpool.splice(0, 1);
         whirlpool[0].water.remove();
+        whirlpool.splice(0, 1);
+        
       }
     }
   }
+  
+  
   //console.log(start);
+  //console.log(outputTxt);
 }
 
 function addWater() {
@@ -143,7 +149,7 @@ function processText() {
   }
 
   for (var i = 0; i < noun.length; i++) {
-    outputTxt.push(noun[floor(random(2 * i))]);
+    outputTxt.push(noun[floor(random(i))]);
     if (i < adv.length) {
       outputTxt.push(adv[floor(random(i))]);
     }
@@ -156,7 +162,7 @@ function processText() {
     if (i < adj.length) {
       outputTxt.push(adj[floor(random(i))]);
     }
-    outputTxt.push(noun[floor(random(2 * i + 1))] + ".");
+    outputTxt.push(noun[floor(random(i))]);
   }
   //console.log(outputTxt);
 
@@ -178,4 +184,5 @@ function addTitle() {
   title.position(windowWidth - 250, 0);
   title.style('font-family', 'Avenir');
   title.style('color', '#7494ff');
+  this.html(' ');
 }
