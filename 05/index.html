@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>05</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/paper-full.js"></script>
+    <script type="text/paperscript" canvas="canvas">
+    	
+		var bPos = new Point(680, 10);
+		var bSize = new Size(80, 30);
+		var pressed = false;
+		var mousePos = view.center;
+		var textArray = [];
+
+		// function getInput() {
+		// 	console.log("submit-button pressed");
+		// }
+
+		//draw the button
+		var guiLayer = new Layer();
+		var submitB = new Shape.Rectangle({
+            position: [bPos.x, bPos.y],
+            size: [bSize.width, bSize.height],
+            radius: [5, 5],
+            fillColor: 'salmon'
+            //strokeColor: 'black',
+            //strokeWidth: 10
+        });
+        var bTag = new PointText(new Point(688, 30));
+        bTag.content = 'submit';
+        bTag.style = {
+    		fontFamily: 'monospace',
+    		fontWeight: 'bold',
+    		fontSize: 18,
+    		fillColor: 'white'
+		};
+
+		
+		//draw the brush stroke
+		var brushLayer = new Layer();
+		var container = [];
+		var containerSize = new Size(4, 8);
+		var unitSize = new Size(40, 20);
+				var pos = new Point(0, 0);
+		for (var i = 0; i < containerSize.width; i++) {
+			container[i] = [];
+			for (var j = 0; j < containerSize.height; j++) {
+				container[i][j] = new Shape.Rectangle({							position: [unitSize.width * i, unitSize.height * j],
+					size: [unitSize.width, unitSize.height],
+					strokeColor: 'black',
+					fillColor: 'grey'
+				});
+			}
+		}	
+		
+		function onFrame(event) {
+			// for (var i = 0; i < children.length; i++) {
+			// 	var brush = children[i];
+			// 	var delta = (mousePos - brush.position);
+			// 	if (delta.length > 0.1)
+			// 	brush.position += delta;
+			// }
+			if (pressed) {
+				brushLayer.position = mousePos;		
+			}
+		}
+
+		function onMouseMove(event) {
+			mousePos = event.point;
+			//console.log(mousePos);
+		}
+
+		function onMouseDown(event) {
+			//button pressed
+			var textInput = document.getElementById("textIn").value;
+			if (event.point.x <= bPos.x + bSize.width && event.point.x >= bPos.x && event.point.y <= bPos.y + bSize.height && event.point.y >= bPos.y) {
+				//console.log(textInput);
+				pressed = true;
+				textProcess(textInput);
+			}
+		}
+
+		function textProcess(text) {
+			var punctuations = /[.,\/#!$%\^&\*;:{}=\-_`~()?]/g;
+			var text0 = text.replace(punctuations, '');
+			var delimiter = /\s/g;
+			var tokens = text0.split(delimiter);
+			textArray = tokens.slice(0, 32);
+			console.log(textArray.length);
+		}
+
+		var textLayer = new Layer();
+		var textMatrix = [];
+		function createTextMatrix() {
+			for (var i = 0; var < containerSize.width; i++) {
+				textMatrix[i] = [];
+				for (var j = 0; j < containerSize.height; j++) {
+					textMatrix[i][j] = 
+				}
+			}
+			var textUnit = 
+			
+		}
+
+
+
+    </script>
+</head>
+<body>
+	<textarea id="textIn" placeholder="Copy some text here😏" rows="4" cols="100"></textarea>
+	<!-- <button type="button" id="submitButton" onclick="getInput">submit</button> -->
+    <canvas id="canvas" resize style="background:white"></canvas>
+
+</body>
+</html>
