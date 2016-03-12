@@ -13,6 +13,9 @@
 		var mousePos = view.center;
 		var textArray = [];
 
+		tool.minDistance = 10;
+		var path;
+
 		// function getInput() {
 		// 	console.log("submit-button pressed");
 		// }
@@ -39,20 +42,23 @@
 		
 		//draw the brush stroke
 		var brushLayer = new Layer();
+
 		var container = [];
 		var containerSize = new Size(4, 8);
 		var unitSize = new Size(40, 20);
-				var pos = new Point(0, 0);
+		var pos = new Point(0, 0);
 		for (var i = 0; i < containerSize.width; i++) {
 			container[i] = [];
 			for (var j = 0; j < containerSize.height; j++) {
-				container[i][j] = new Shape.Rectangle({							position: [unitSize.width * i, unitSize.height * j],
+				container[i][j] = new Shape.Rectangle({							
+					position: [unitSize.width * i, unitSize.height * j],
 					size: [unitSize.width, unitSize.height],
 					strokeColor: 'black',
 					fillColor: 'grey'
 				});
 			}
-		}	
+		}
+	
 		
 		function onFrame(event) {
 			// for (var i = 0; i < children.length; i++) {
@@ -62,8 +68,10 @@
 			// 	brush.position += delta;
 			// }
 			if (pressed) {
-				brushLayer.position = mousePos;		
+				brushLayer.position = mousePos;	
+				textLayer.position = mousePos;	
 			}
+			//paintLayer.position = 
 		}
 
 		function onMouseMove(event) {
@@ -78,6 +86,26 @@
 				//console.log(textInput);
 				pressed = true;
 				textProcess(textInput);
+				createTextMatrix();
+				drawMode();
+			} else {
+				path = new Path();
+				path.add(event.point);
+				// path.strokeColor = 'green';
+				var paintLayer = new Layer({
+					children: [path],
+					strokeColor: 'grey',
+					position: event.point
+				});
+
+				
+			}
+		}
+
+		function onMouseDrag(event) {
+			mousePos = event.point;
+			if (pressed) {
+				path.add(event.point);
 			}
 		}
 
@@ -87,22 +115,51 @@
 			var delimiter = /\s/g;
 			var tokens = text0.split(delimiter);
 			textArray = tokens.slice(0, 32);
-			console.log(textArray.length);
+			//console.log(textArray.length);
 		}
 
 		var textLayer = new Layer();
-		var textMatrix = [];
+		var textMatrix = []; //2d string array that contains all the tokens
+		var textMatrix0 = []; //2d array of paper.js PointText that takes values from textMatrix
+		var textPaint = []; //2d boolean array for checking regex later
 		function createTextMatrix() {
-			for (var i = 0; var < containerSize.width; i++) {
-				textMatrix[i] = [];
-				for (var j = 0; j < containerSize.height; j++) {
-					textMatrix[i][j] = 
-				}
-			}
-			var textUnit = 
-			
+		 	for (var i = 0; i < containerSize.height; i++) {
+		 		textMatrix[i] = [];
+		 		textMatrix0[i] = [];
+		 		textPaint[i] = [];
+		 		textMatrix[i].push(textArray.length / containerSize.width);
+		 		for (var j = 0; j < containerSize.width; j++) {
+		 			textMatrix[i][j] = textArray[j % containerSize.width + i * containerSize.width];
+		 			textMatrix0[i][j] = new PointText({							
+		 				position: [unitSize.width * j, unitSize.height * i],
+						fillColor: 'blue',
+						fontSize: 8,
+						content: textMatrix[i][j]
+					});
+					textPaint[i][j] = false;
+		 		}
+		 	}
+			//console.log(textPaint);	
 		}
 
+		function drawMode() {
+			var regex1 = /[e]/g;
+			var select = [];
+			var strokeNum = 0;
+
+			for (var i = 0; i < containerSize.height; i++) {
+				select[i] = [];
+				for (var j = 0; j < containerSize.width; j++) {
+					select[i][j] = regex1.test(textMatrix[i][j]);
+					if (select[i][j]) {
+						strokeNum++; //count how many of them are true
+					}
+				}
+			}
+			textPaint = select;
+			console.log(strokeNum);	
+			
+		}
 
 
     </script>
