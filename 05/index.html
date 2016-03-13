@@ -14,6 +14,7 @@
 		var textArray = [];
 
 		tool.minDistance = 10;
+		tool.maxDistance = 40;
 		var paths = [];
 
 		// function getInput() {
@@ -27,8 +28,6 @@
             size: [bSize.width, bSize.height],
             radius: [5, 5],
             fillColor: 'salmon'
-            //strokeColor: 'black',
-            //strokeWidth: 10
         });
         var bTag = new PointText(new Point(688, 30));
         bTag.content = 'submit';
@@ -44,29 +43,23 @@
 		var brushLayer = new Layer();
 
 		var container = [];
-		var containerSize = new Size(4, 8);
-		var unitSize = new Size(40, 20);
+		var containerSize = new Size(4, 16);
+		var unitSize = new Size(50, 10);
 		var pos = new Point(0, 0);
-		for (var i = 0; i < containerSize.width; i++) {
-			container[i] = [];
-			for (var j = 0; j < containerSize.height; j++) {
-				container[i][j] = new Shape.Rectangle({							
-					position: [unitSize.width * i, unitSize.height * j],
-					size: [unitSize.width, unitSize.height],
-					strokeColor: 'black',
-					fillColor: 'grey'
-				});
-			}
-		}
+		// for (var i = 0; i < containerSize.width; i++) {
+		// 	container[i] = [];
+		// 	for (var j = 0; j < containerSize.height; j++) {
+		// 		container[i][j] = new Shape.Rectangle({							
+		// 			position: [unitSize.width * i, unitSize.height * j],
+		// 			size: [unitSize.width, unitSize.height],
+		// 			strokeColor: 'black',
+		// 			fillColor: 'grey'
+		// 		});
+		// 	}
+		// }
 	
 		
 		function onFrame(event) {
-			// for (var i = 0; i < children.length; i++) {
-			// 	var brush = children[i];
-			// 	var delta = (mousePos - brush.position);
-			// 	if (delta.length > 0.1)
-			// 	brush.position += delta;
-			// }
 			if (pressed) {
 				brushLayer.position = mousePos;	
 				textLayer.position = mousePos;	
@@ -79,11 +72,11 @@
 		}
 
 		var plusPoints = [];
+		var prepareDraw = false;
 		function onMouseDown(event) {
 			//button pressed
 			var textInput = document.getElementById("textIn").value;
 			if (event.point.x <= bPos.x + bSize.width && event.point.x >= bPos.x && event.point.y <= bPos.y + bSize.height && event.point.y >= bPos.y) {
-				//console.log(textInput);
 				pressed = true;
 				textProcess(textInput);
 				createTextMatrix();
@@ -94,21 +87,42 @@
 
 				 	paths[n] = new Path();
 				 	paths[n].add(event.point + plusPoints[n]);
-				 	//console.log(paths);
 					var paintLayer = new Layer({
 						children: [paths[n]],
-						strokeColor: 'red'
+						strokeColor: 'red',
+						fillColor: 'purple'
 					});
 				}
-				console.log(plusPoints);	
+				prepareDraw = true;
+				//console.log(plusPoints);	
 			}
 		}
 
 		function onMouseDrag(event) {
 			mousePos = event.point;
-			if (pressed) {
+			if (prepareDraw) {
 				for (var n = 0; n < strokeNum; n++) {
-					paths[n].add(event.point + plusPoints[n]);
+					//paths[n].add(event.point + plusPoints[n]);
+
+					var step = event.delta / 2;
+					step.angle += 90;
+	
+					var top = event.middlePoint + plusPoints[n] + step;
+					var bottom = event.middlePoint + plusPoints[n] - step;
+	
+					paths[n].add(top);
+					paths[n].insert(0, bottom);
+					paths[n].smooth();
+				}
+			}
+		}
+
+		function onMouseUp(event) {
+			if (prepareDraw) {
+				for (var n = 0; n < strokeNum; n++) {
+				 	paths[n].add(event.point + plusPoints[n]);
+				 	paths[n].closed = true;
+				 	paths[n].smooth();
 				}
 			}
 		}
@@ -118,8 +132,7 @@
 			var text0 = text.replace(punctuations, '');
 			var delimiter = /\s/g;
 			var tokens = text0.split(delimiter);
-			textArray = tokens.slice(0, 32);
-			//console.log(textArray.length);
+			textArray = tokens.slice(0, containerSize.width * containerSize.height);
 		}
 
 		var textLayer = new Layer();
@@ -136,45 +149,42 @@
 		 			textMatrix[i][j] = textArray[j % containerSize.width + i * containerSize.width];
 		 			textMatrix0[i][j] = new PointText({							
 		 				position: [unitSize.width * j, unitSize.height * i],
-						fillColor: 'blue',
+						fillColor: 'grey',
 						fontSize: 8,
+						fontFamily: 'monospace',
 						content: textMatrix[i][j]
 					});
 					textPaint[i][j] = false;
 		 		}
-		 	}
-			//console.log(textPaint);	
+		 	}	
 		}
 
 		var strokeNum = 0;
 		var extraPoints = [];
 		function drawMode() {
-			var regex1 = /[e]/g;
+			var regex1 = /[a]/g;
 			var select = [];
-			// var strokeNum = 0;
-
 			for (var i = 0; i < containerSize.height; i++) {
 				select[i] = [];
 				for (var j = 0; j < containerSize.width; j++) {
 					select[i][j] = regex1.test(textMatrix[i][j]);
 					if (select[i][j]) {
 						strokeNum++; //count how many words that match with the regex
-						//console.log(textMatrix0[i][j].position);
+						textMatrix0[i][j].fillColor = 'red';
+						//relative position of the "true" words
 						extraPoints.push([(j - containerSize.width/2) * unitSize.width + 2, (i - containerSize.height/2) * unitSize.height + 6]);  
-
 					}
 				}
 			}
 			textPaint = select;
-			//console.log(strokeNum);	
-			//console.log(extraPoints);
 		}
 
 
     </script>
 </head>
 <body>
-	<textarea id="textIn" placeholder="Copy some text here😏" rows="4" cols="100"></textarea>
+	<h1>How to remember Regex? (A Visual Regex Exercise)</h1>
+	<textarea id="textIn" placeholder="Copy some text here 😏 (more than 70 words)" rows="4" cols="100"></textarea>
 	<!-- <button type="button" id="submitButton" onclick="getInput">submit</button> -->
     <canvas id="canvas" resize style="background:white"></canvas>
 

@@ -24,3 +24,9 @@ canvas[resize] {
 	outline: none;
 	font-family: monospace;
 }
+
+h1 {
+	text-align: center;
+	font-family: monospace;
+	color: salmon;
+}
