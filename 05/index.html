@@ -8,6 +8,7 @@
     <script type="text/paperscript" canvas="canvas">
 
     // reference: http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
+    // lots of googling
     	
 		var bPos = new Point(680, 10);
 		var bSize = new Size(80, 30);
@@ -29,7 +30,7 @@
             position: [bPos.x, bPos.y],
             size: [bSize.width, bSize.height],
             radius: [5, 5],
-            fillColor: 'navy'
+            fillColor: '#5600D8'
         });
         var bTag = new PointText(new Point(688, 30));
         bTag.content = 'submit';
@@ -75,53 +76,66 @@
 
 		var plusPoints = [];
 		var prepareDraw = false;
+		var distToMouse = [];
+		var pathColor = [];
+		var counter = false;
 		function onMouseDown(event) {
-			//button pressed
+			// button pressed
 			var textInput = document.getElementById("textIn").value;
-			if (event.point.x <= bPos.x + bSize.width && event.point.x >= bPos.x && event.point.y <= bPos.y + bSize.height && event.point.y >= bPos.y) {
+			if (event.point.x <= bPos.x + bSize.width && event.point.x >= bPos.x && event.point.y <= bPos.y + bSize.height && event.point.y >= bPos.y && !counter) {
 				pressed = true;
 				textProcess(textInput);
 				createTextMatrix();
-				drawMode();
+				drawRegex();
+				counter = true;
 			} else {
-				var distToMouse = [];
+				// if buttons is pressed, start creating "brush"
+				var colorVal = [];
 				for (var n = 0; n < strokeNum; n++) {
 					plusPoints[n] = new Point(extraPoints[n]);
-
 				 	paths[n] = new Path();
 				 	paths[n].add(event.point + plusPoints[n]);
 
-				 	//console.log(plusPoints.length);
-
-				 	distToMouse[n] = Math.sqrt(Math.pow(plusPoints[n].x, 2) + Math.pow(plusPoints[n].y, 2));
-
-
-				 	var pathColor = new Color(1, 0, 0.5, 0.2);
+				 	distToMouse[n] = Math.floor(Math.sqrt(Math.pow(plusPoints[n].x, 2) + Math.pow(plusPoints[n].y, 2)));
+				 	// colorVal[n] = mapValue(distToMouse[n], 1, 0, 0, Math.floor(Math.sqrt(Math.pow(containerSize.x, 2) * unitSize.width + Math.pow(containerSize.y, 2) * unitSize.height))); 
 
 					var paintLayer = new Layer({
-						children: [paths[n]],
+						children: [paths[n]]
 						//strokeColor: pathColor,
-						fillColor: pathColor
-						
+						//fillColor: pathColor[n]
 					});
 				}
 				prepareDraw = true;
-				console.log(distToMouse);	
+				for (var p = 0; p < distToMouse.length; p++) {
+					pathColor[p] = new Color(0.8 - distToMouse[p] / 255, 0.2, 0.8, 0.5 - distToMouse[p] / 255);
+					paths[p].fillColor = pathColor[p];
+				}
 			}
 		}
 
 		function onMouseDrag(event) {
 			mousePos = event.point;
+			var step = [];
+			var starPath = [];
+			var top;
+			var bottom;
 			if (prepareDraw) {
 				for (var n = 0; n < strokeNum; n++) {
 					//paths[n].add(event.point + plusPoints[n]);
 
-					var step = event.delta / 8;
-					step.angle += 90;
-	
-					var top = event.middlePoint + plusPoints[n] + step;
-					var bottom = event.middlePoint + plusPoints[n] - step;
-	
+					if (Math.abs(event.delta.x) <= 30 && Math.abs(event.delta.y) <= 30) {
+						step[n] = event.delta / (distToMouse[n] / 10);
+					} else {
+						starPath[n] = new Path.Star(plusPoints[n] + event.middlePoint, 5, event.delta.x / 16, event.delta.x / 6);
+						starPath[n].fillColor = pathColor[n];
+						step[n] = event.delta / distToMouse[n] + starPath[n];
+						
+					}
+					step[n].angle += 90;
+
+					top = event.middlePoint + plusPoints[n] + step[n];
+					bottom = event.middlePoint + plusPoints[n] - step[n];
+
 					paths[n].add(top);
 					paths[n].insert(0, bottom);
 					paths[n].smooth();
@@ -161,7 +175,7 @@
 		 			textMatrix[i][j] = textArray[j % containerSize.width + i * containerSize.width];
 		 			textMatrix0[i][j] = new PointText({							
 		 				position: [unitSize.width * j, unitSize.height * i],
-						fillColor: 'grey',
+						fillColor: '#999',
 						fontSize: 8,
 						fontFamily: 'monospace',
 						content: textMatrix[i][j]
@@ -173,22 +187,39 @@
 
 		var strokeNum = 0;
 		var extraPoints = [];
-		function drawMode() {
-			var regex1 = /[a]/g;
+		// draw strokes according to selected regex
+		function drawRegex() {
+			// var regex1 = /[a]/g;
+			var regexIn = document.getElementById("regexIn").value;
+
+			// question: when create a new regex from string, it adds "/\"
+			var flags = regexIn.replace(/.*\/([gimy]*)$/, '$1');
+			var pattern = regexIn.replace(new RegExp('^/(.*?)/'+flags+'$'), '$1');
+			var regex = new RegExp(pattern, flags);
+
 			var select = [];
 			for (var i = 0; i < containerSize.height; i++) {
 				select[i] = [];
 				for (var j = 0; j < containerSize.width; j++) {
-					select[i][j] = regex1.test(textMatrix[i][j]);
+					select[i][j] = regex.test(textMatrix[i][j]);
 					if (select[i][j]) {
 						strokeNum++; //count how many words that match with the regex
-						textMatrix0[i][j].fillColor = 'red';
+						textMatrix0[i][j].fillColor = '#6C0AFF';
 						//relative position of the "true" words
 						extraPoints.push([(j - containerSize.width/2) * unitSize.width + 2, (i - containerSize.height/2) * unitSize.height + 6]);  
 					}
 				}
 			}
 			textPaint = select;
+			if (strokeNum == 0) {
+				document.getElementById("regexIn").value = "invalid regex, please try again"
+			}
+		}
+
+		function onKeyDown(event) {
+			if (event.key == 'space') {
+				location.reload();
+			}
 		}
 
 
@@ -196,7 +227,9 @@
 </head>
 <body>
 	<h1>Regex Drawing</h1>
-	<textarea id="textIn" placeholder="Copy some text here 😏 (more than 70 words)" rows="4" cols="100"></textarea>
+	<p>Enter a regex to test your input text. Submit to create a regex paintbrush and draw on the screen (try different speed). Default regex checks any words with "a". Press "space" to restart.</p>
+	<textarea id="regexIn" rows="4" cols="10">/[a]/g</textarea>
+	<textarea id="textIn" placeholder="Copy some text here 😏😏😏 (more than 70 words)" rows="4" cols="100"></textarea>
 	<!-- <button type="button" id="submitButton" onclick="getInput">submit</button> -->
     <canvas id="canvas" resize style="background:white"></canvas>
 

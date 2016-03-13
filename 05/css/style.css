@@ -11,22 +11,37 @@ canvas[resize] {
     height: 100%;
 }
 
-#textIn {
+textarea {
 	size: 20px 50%;
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
+	display: inline-block;
+    margin-top: 0;
 	background-color: white;
-	border: solid 2px navy;
+	border: solid 2px #5600D8;
 	border-radius: 5px;
 	resize: none;
 	outline: none;
 	font-family: monospace;
 }
 
+p {
+	text-align: center;
+	font-family: monospace;
+	color: #5600D8;
+	margin: 0 20% 20px 20%;
+}
+
+#textIn {
+	margin-left: 5%;
+    margin-right: auto;
+}
+
+#regexIn {
+	margin-left: 20%;
+    margin-right: auto;
+}
+
 h1 {
 	text-align: center;
 	font-family: monospace;
-	color: navy;
+	color: #5600D8;
 }
