@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="js/paper-full.js"></script>
     <script type="text/paperscript" canvas="canvas">
+
+    // reference: http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
     	
 		var bPos = new Point(680, 10);
 		var bSize = new Size(80, 30);
@@ -27,7 +29,7 @@
             position: [bPos.x, bPos.y],
             size: [bSize.width, bSize.height],
             radius: [5, 5],
-            fillColor: 'salmon'
+            fillColor: 'navy'
         });
         var bTag = new PointText(new Point(688, 30));
         bTag.content = 'submit';
@@ -43,8 +45,8 @@
 		var brushLayer = new Layer();
 
 		var container = [];
-		var containerSize = new Size(4, 16);
-		var unitSize = new Size(50, 10);
+		var containerSize = new Size(4, 20);
+		var unitSize = new Size(60, 10);
 		var pos = new Point(0, 0);
 		// for (var i = 0; i < containerSize.width; i++) {
 		// 	container[i] = [];
@@ -82,19 +84,29 @@
 				createTextMatrix();
 				drawMode();
 			} else {
+				var distToMouse = [];
 				for (var n = 0; n < strokeNum; n++) {
 					plusPoints[n] = new Point(extraPoints[n]);
 
 				 	paths[n] = new Path();
 				 	paths[n].add(event.point + plusPoints[n]);
+
+				 	//console.log(plusPoints.length);
+
+				 	distToMouse[n] = Math.sqrt(Math.pow(plusPoints[n].x, 2) + Math.pow(plusPoints[n].y, 2));
+
+
+				 	var pathColor = new Color(1, 0, 0.5, 0.2);
+
 					var paintLayer = new Layer({
 						children: [paths[n]],
-						strokeColor: 'red',
-						fillColor: 'purple'
+						//strokeColor: pathColor,
+						fillColor: pathColor
+						
 					});
 				}
 				prepareDraw = true;
-				//console.log(plusPoints);	
+				console.log(distToMouse);	
 			}
 		}
 
@@ -104,7 +116,7 @@
 				for (var n = 0; n < strokeNum; n++) {
 					//paths[n].add(event.point + plusPoints[n]);
 
-					var step = event.delta / 2;
+					var step = event.delta / 8;
 					step.angle += 90;
 	
 					var top = event.middlePoint + plusPoints[n] + step;
@@ -183,7 +195,7 @@
     </script>
 </head>
 <body>
-	<h1>How to remember Regex? (A Visual Regex Exercise)</h1>
+	<h1>Regex Drawing</h1>
 	<textarea id="textIn" placeholder="Copy some text here 😏 (more than 70 words)" rows="4" cols="100"></textarea>
 	<!-- <button type="button" id="submitButton" onclick="getInput">submit</button> -->
     <canvas id="canvas" resize style="background:white"></canvas>

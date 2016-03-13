@@ -18,7 +18,7 @@ canvas[resize] {
     margin-right: auto;
     margin-top: 20px;
 	background-color: white;
-	border: solid 2px salmon;
+	border: solid 2px navy;
 	border-radius: 5px;
 	resize: none;
 	outline: none;
@@ -28,5 +28,5 @@ canvas[resize] {
 h1 {
 	text-align: center;
 	font-family: monospace;
-	color: salmon;
+	color: navy;
 }
