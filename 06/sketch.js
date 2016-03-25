@@ -7,8 +7,9 @@ var keys = [];
 
 var player;
 var stars = [];
-var playerPos;
-var starPos;
+var start;
+var lose;
+var win;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -26,8 +27,8 @@ function setup() {
     }
   }
 
-  //console.log(concordance);
-  //console.log(keys);
+  // console.log(concordance);
+  // console.log(keys);
 
   keys.sort(function(a, b) {
     return (concordance[b] - concordance[a]);
@@ -35,28 +36,32 @@ function setup() {
 
   for (i in keys) {
     if (keys.hasOwnProperty(i)) {
-      console.log(keys[i] + " " + concordance[keys[i]]);
+      //console.log(keys[i] + " " + concordance[keys[i]]);
     }
   }
 
-  for (var i = 0; i < 10; i++) {
-    stars.push(new Star(random(0, windowWidth), random(0, windowHeight), 50, 1));
+  for (var i = 0; i < 8; i++) {
+    stars.push(new Star(random(150, windowWidth - 150), random(150, windowHeight - 150), floor(random(20, 100)), floor(random(0, 4))));
   }
+  player = new Player(0, windowHeight / 2);
 
-  playerPos = createVector(windowWidth / 2, windowHeight / 2);
-  player = new Player();
+  start = false;
+  lose = false;
+  win = false;
 }
 
 function draw() {
-  var test = [];
+  background(255);
+  smooth();
 
   for (var i = 0; i < stars.length; i++) {
-    test[i] = stars[i].move();
+    stars[i].move();
     stars[i].show();
-    stars[i].collide();
+    //stars[i].collide();
   }
-  
+
   player.move();
+  player.control();
   player.show();
 }
 
@@ -67,31 +72,121 @@ function Star(xPos, yPos, size, mode) {
   this.starSize = size;
   this.starMode = mode;
 
-  this.move = function() {
-    return this.starPos;
-  }
-  this.show = function() {
-    if (this.starMode == 0) {
-      ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
-    } else if (this.starMode == 1) {
-      ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
-      ellipse(this.starPos.x + 10, this.starPos.y, this.starSize / 4, this.starSize / 4);
-    } else if (this.starMode == 2) {
+  this.planetPos = createVector(0, 0);
+  this.planetPos.x = this.starPos.x;
+  this.planetPos.y = this.starPos.y;
 
+  this.angle = 0;
+  this.angle0 = random(0, 2*PI);
+
+
+  this.move = function() {
+    if (this.starMode == 0) {
+      this.s = this.starSize / 80;
+      this.starPos.x += this.s * sin(this.angle);
+      this.starPos.y += this.s * cos(this.angle);
+      this.angle += 0.01;
+    } else if (this.starMode == 1) {
+      this.s = this.starSize / 60;
+      this.starPos.y += this.s * cos(this.angle);
+      this.angle += 0.02;
+    } else if (this.starMode == 2) {
+      this.s = this.starSize / 60;
+      this.starPos.x += this.s * sin(this.angle);
+      this.angle += 0.03;
+    } else if (this.starMode == 3) {
+      this.s = this.starSize / 120;
+      // this.starPos.x += this.s * sin(this.angle);
+      // this.starPos.y += this.s * cos(this.angle);
+      this.planetPos.x += this.starSize / 20 * sin(this.angle0);
+      this.planetPos.y += this.starSize / 20 * cos(this.angle0);
+      this.angle += 0.01;
+      this.angle0 += 0.04;
     }
   }
-  this.collide = function() {
+  this.show = function() {
+    stroke(0);
+    fill(255);
+    if (this.starMode == 0 || this.starMode == 1 || this.starMode == 2) {
+      ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
+    } else if (this.starMode == 3) {
+      ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
+      ellipse(this.planetPos.x, this.planetPos.y, this.starSize / 4, this.starSize / 4);
+    }
+  }
 
+  this.passedVal = function() {
+    return {
+      pos: this.starPos,
+      mass: this.starSize
+    };
   }
 
 }
 
-function Player() {
+function Player(posX, posY) {
+  this.playerPos = createVector(0, 0);
+  this.playerPos.x = posX;
+  this.playerPos.y = posY;
+  this.playerSize = 30;
+  this._starPos = [];
+  this._starSize = [];
+  this.distances = [];
+
+  this.m = 10000; //player position realtive to star mass/size 
+  this.d = 100000; //player position realtive to star position
+  this.amt = [];
+
+  // question: why can't I write it this way to sort the numbers?
+  // this.distances.sort(function(a, b) {
+  //   return this.distances[a] - this.distances[b];
+  // });
+  //console.log(this.distances);
 
   this.move = function() {
+    for (var i = 0; i < stars.length; i++) {
+      this._starPos[i] = stars[i].passedVal().pos;
+      this._starSize[i] = stars[i].passedVal().mass;
+      this.distances[i] = floor(dist(this.playerPos.x, this.playerPos.y, this._starPos[i].x, this._starPos[i].y));
+      this.amt[i] = this.distances[i] / this.d + this._starSize[i] / this.m;
 
+      // gravitational attraction from the stars
+      if (this.distances[i] <= 200 && this.distances[i] > this._starSize[i] / 2 + this.playerSize / 2) {
+        this.playerPos.x = lerp(this.playerPos.x, this._starPos[i].x, this.amt[i]);
+        this.playerPos.y = lerp(this.playerPos.y, this._starPos[i].y, this.amt[i]);
+      } else if (this.distances[i] <= this._starSize[i] / 2 + this.playerSize / 2) {
+        console.log("lost");
+        lose = true;
+      }
+      if (this.playerPos.x >= windowWidth - this.playerSize / 2) {
+        this.playerPos.x = windowWidth - this.playerSize / 2;
+        win = true;
+        console.log("won");
+      } else if (this.playerPos.x <= this.playerSize / 2) {
+        this.playerPos.x = this.playerSize / 2;
+      } else if (this.playerPos.y >= windowHeight - this.playerSize / 2) {
+        this.playerPos.y = windowHeight - this.playerSize / 2;
+      } else if (this.playerPos.y <= this.playerSize / 2) {
+        this.playerPos.y = this.playerSize / 2;
+      }
+    }
   }
-  this.show = function() {
 
+  this.control = function keyTyped() {
+    if (key === 'a') {
+      this.playerPos.x -= 5;
+    } else if (key === 'd') {
+      this.playerPos.x += 5;
+    } else if (key === 'w') {
+      this.playerPos.y -= 5;
+    } else if (key === 's') {
+      this.playerPos.y += 5;
+    }
+  }
+
+  this.show = function() {
+    noStroke();
+    fill(255, 0, 0);
+    ellipse(this.playerPos.x, this.playerPos.y, this.playerSize, this.playerSize);
   }
 }
