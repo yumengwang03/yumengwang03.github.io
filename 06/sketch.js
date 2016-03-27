@@ -24,6 +24,7 @@ var inputKeys;
 var inputFrequency;
 var textInput;
 var button;
+var randomStart = [];
 
 function preload() {
   data1 = loadStrings('data/data1.txt');
@@ -39,30 +40,30 @@ function setup() {
   index = 0;
 
   textInput = createElement('textarea', "Copy an article here!");
-  textInput.size(500, 200);
-  textInput.position(100, 100);
+  textInput.size(windowWidth * 0.6, 360);
+  textInput.position(windowWidth * 0.2, 100);
   textInput.style('resize', 'none');
-  textInput.style('border', 'dotted #2D09E2 2px');
-  textInput.style('font-size', '1.5em');
-  textInput.style('color', '#2D09E2');
+  textInput.style('border', 'dotted #3df 1px');
+  textInput.style('font-family', 'Arial');
+  textInput.style('font-size', '1em');
+  textInput.style('color', '#3df');
   textInput.style('outline', 'none');
   textInput.mousePressed(function() {
     this.html('')
   });
 
   button = createButton('START');
-  button.size(60, 40);
-  button.position(200, 500);
+  button.size(windowWidth * 0.05, 40);
+  button.position(windowWidth * 0.45, 500);
+  button.style('font-family', 'Arial Black');
   button.style('font-size', '1em');
   button.style('border-radius', '10px');
-  button.style('border', '#2D09E2');
-  button.style('background-color', '#FFEA00');
+  button.style('border', 'white');
+  button.style('background-color', '#3fb');
   button.style('color', 'white');
   button.style('outline', 'none');
   button.mousePressed(buttonPressed);
 
-  var testData1 = "Hey, remember when the FCC reassured us last year that it wasn’t going to lock down Wi-Fi routers? And everyone breathed a sigh of relief, because custom router firmware is actually a really good thing? Sure, it’s fun to improve your router by extending the range or making your network friendlier for guests. But open firmware is important for other reasons: it enables critical infrastructure, from emergency communications for disaster relief and building free community access points to beefing up personal security. Well, there goes that. Because even though the FCC said its new requirements were not intended to lock down router software or block the installation of open source firmware, at least one large manufacturer has reacted by doing just that. And more could follow. Way to go, FCC. Last month, Libre Planet—a free software community—raised the alarm that TP-Link, one of the largest router manufacturers, had begun locking down firmware in newly released routers. As proof, Libre Planet pointed to a transcript of a support conversation. In the chat, a TP-Link rep says that the lockdown—which blocks the installation of open source firmware—was a reaction to new FCC requirements. That’s a problem, because alternative router software packages like DD-WRT are hugely popular. These tools provide more sophisticated features and faster security patches than manufacturers offer.";
-  
   var text1 = join(data1, '\n');
   var text2 = join(data2, '\n');
   var text3 = join(data3, '\n');
@@ -74,11 +75,6 @@ function setup() {
   keys3 = textAnalyze(text3).keys;
   keys4 = textAnalyze(text4).keys;
   keys5 = textAnalyze(text5).keys;
-  // inputKeys = textAnalyze(testData1).keys;
-
-  // inputFrequency = get_tf_idf(inputKeys, testData1);
-  // player = new Player(0, windowHeight / 2);
-
   start = false;
   lose = false;
   win = false;
@@ -182,9 +178,21 @@ function tf_idf(word, totalWords, totalDocs, wordDocs) {
 function draw() {
   background(255);
   smooth();
+  
+  //var randomStart[0] = createVector(random(150, windowWidth - 150), random(150, windowHeight - 150));
+
   if (start) {
+    stroke(0, 0, 0, 120);
+    strokeWeight(1);
+    noFill();
+    rect(0, 0, 20, windowHeight);
+    rect(windowWidth - 20, 0, 20, windowHeight);
+
     if (stars.length < worldSize) {
-      var newStar = new Star(inputFrequency[index], random(150, windowWidth - 150), random(150, windowHeight - 150), floor(random(0, 4)))
+      from = color(0, 170, 255, 80);
+      to = color(0, 255, 212, 80);
+      var starColor = lerpColor(from, to, random(0.4, 1));
+      var newStar = new Star(inputFrequency[index], random(150, windowWidth - 150), random(150, windowHeight - 150), floor(random(0, 4)), starColor)
       index++;
       //console.log(inputFrequency[index]);
       stars.push(newStar);
@@ -197,36 +205,46 @@ function draw() {
     player.control();
     player.show();
   }
+
+  if (lose) {
+    window.open("http://www.theguardian.com/teacher-network/2012/aug/16/a-level-student-success-failure");
+    window.open("http://qideas.org/articles/the-value-of-failure/");
+    window.open("http://ww2.kqed.org/mindshift/2015/08/12/what-do-students-lose-by-being-perfect-valuable-failure/");
+    location.reload();
+  }
+  
+  if (win) {
+    window.open("http://giphy.com/gifs/l4KhQo2MESJkc6QbS/html5");
+    location.reload();
+  }
 }
 
-function Star(displayWord, xPos, yPos, mode) {
+function Star(displayWord, xPos, yPos, mode, starColor) {
   this.starPos = createVector(0, 0);
   this.starPos.x = xPos;
   this.starPos.y = yPos;
   this.starSize = 10 * (10 - index + 1);
-  this.starMode = mode;
   this.planetPos = createVector(0, 0);
   this.planetPos.x = this.starPos.x;
   this.planetPos.y = this.starPos.y;
   this.angle = 0;
   this.angle0 = 0;
-  this.word = displayWord;
 
   this.move = function() {
-    if (this.starMode == 0) {
+    if (mode == 0) {
       this.s = this.starSize / 80;
       this.starPos.x += this.s * sin(this.angle);
       this.starPos.y += this.s * cos(this.angle);
       this.angle += 0.01;
-    } else if (this.starMode == 1) {
+    } else if (mode == 1) {
       this.s = this.starSize / 60;
       this.starPos.y += this.s * cos(this.angle);
       this.angle += 0.02;
-    } else if (this.starMode == 2) {
+    } else if (mode == 2) {
       this.s = this.starSize / 60;
       this.starPos.x += this.s * sin(this.angle);
       this.angle += 0.03;
-    } else if (this.starMode == 3) {
+    } else if (mode == 3) {
       this.s = this.starSize / 120;
       this.starPos.x += this.s * sin(this.angle);
       this.starPos.y += this.s * cos(this.angle);
@@ -237,19 +255,20 @@ function Star(displayWord, xPos, yPos, mode) {
     }
   }
   this.show = function() {
-    stroke(0);
-    fill(255);
-    if (this.starMode == 0 || this.starMode == 1 || this.starMode == 2) {
+    noStroke(0);
+    fill(starColor);
+    if (mode == 0 || mode == 1 || mode == 2) {
       ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
-    } else if (this.starMode == 3) {
+    } else if (mode == 3) {
       ellipse(this.starPos.x, this.starPos.y, this.starSize, this.starSize);
       ellipse(this.planetPos.x - 5 * this.starSize / 4, this.planetPos.y, this.starSize / 4, this.starSize / 4);
     }
-    fill(0, 0, 180);
-    noStroke();
+
+    fill(0, 170, 255, 180);
+    textFont("Arial Black");
     textSize(this.starSize / 3);
     textAlign(CENTER);
-    text(this.word, this.starPos.x, this.starPos.y + this.starSize / 10);
+    text(displayWord, this.starPos.x, this.starPos.y + this.starSize / 10);
   }
 
   this.passedVal = function() {
@@ -291,7 +310,7 @@ function Player(posX, posY) {
       if (this.playerPos.x >= windowWidth - this.playerSize / 2) {
         this.playerPos.x = windowWidth - this.playerSize / 2;
         win = true;
-        console.log("won");
+        //console.log("won");
       } else if (this.playerPos.x <= this.playerSize / 2) {
         this.playerPos.x = this.playerSize / 2;
       } else if (this.playerPos.y >= windowHeight - this.playerSize / 2) {
@@ -313,8 +332,22 @@ function Player(posX, posY) {
     }
   }
   this.show = function() {
-    noStroke();
-    fill(255, 0, 0);
-    ellipse(this.playerPos.x, this.playerPos.y, this.playerSize, this.playerSize);
+    stroke(0, 0, 0, 120);
+    strokeWeight(2);
+    noFill();
+    //ellipse(this.playerPos.x, this.playerPos.y, this.playerSize, this.playerSize);
+    polygon(this.playerPos.x, this.playerPos.y, this.playerSize / 2, 5);
   }
+}
+
+//function reference: https://processing.org/examples/regularpolygon.html
+function polygon(x, y, r, npoints) {
+  var angle = TWO_PI / npoints;
+  beginShape();
+  for (var a = 0; a < TWO_PI; a += angle) {
+    var sx = x + cos(a) * r;
+    var sy = y + sin(a) * r;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
 }
