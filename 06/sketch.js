@@ -157,7 +157,7 @@ function get_tf_idf(keys, text) {
   for (var i in keys) {
     if (keys.hasOwnProperty(i)) {
       all_tf_idf[i] = tf_idf(_concordance[keys[i]], _tokens.length, 6, _wordInDocs[keys[i]]);
-      //console.log(keys[i] + " " + all_tf_idf[i]);
+      console.log(keys[i] + " " + all_tf_idf[i]);
       topWords[keys[i]] = all_tf_idf[i];
     }
   }
