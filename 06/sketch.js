@@ -1,6 +1,13 @@
+// It's a Big Wor(l)d
+
 // reference:
 // Bryan's concordance example - https://github.com/whoisbma/Code-2-SP16/blob/master/week-06-concordance/concordance/sketch.js
 // tf-idf - http://www.cnblogs.com/biyeymyhjob/archive/2012/07/17/2595249.html
+
+// Top 10 most frequently used words from your input article will be filtered to create the stars/planets in the "Big Wor(l)d",
+// through if-idf compared with other 5 prepared documents (the more documents, the more accurate).
+// Each star/planet has a different size and gravity, relative to its if-idf value. 
+// Move the spaceship across the "Big Wor(l)d" to reach the other side without crushing on any stars/planets
 
 var worldSize;
 var player;
@@ -9,35 +16,30 @@ var start;
 var lose;
 var win;
 var index;
+var order;
 
-var data1;
-var data2;
-var data3;
-var data4;
-var data5;
-var keys1;
-var keys2;
-var keys3;
-var keys4;
-var keys5;
+var data = [];
+var dataKeys = [];
 var inputKeys;
 var inputFrequency;
 var textInput;
 var button;
-var randomStart = [];
+var intro;
+//var randomStart = [];
 
 function preload() {
-  data1 = loadStrings('data/data1.txt');
-  data2 = loadStrings('data/data2.txt');
-  data3 = loadStrings('data/data3.txt');
-  data4 = loadStrings('data/data4.txt');
-  data5 = loadStrings('data/data5.txt');
+  data[1] = loadStrings('data/data1.txt');
+  data[2] = loadStrings('data/data2.txt');
+  data[3] = loadStrings('data/data3.txt');
+  data[4] = loadStrings('data/data4.txt');
+  data[5] = loadStrings('data/data5.txt');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   worldSize = 10;
   index = 0;
+  order = 0;
 
   textInput = createElement('textarea', "Copy an article here!");
   textInput.size(windowWidth * 0.6, 360);
@@ -64,20 +66,21 @@ function setup() {
   button.style('outline', 'none');
   button.mousePressed(buttonPressed);
 
-  var text1 = join(data1, '\n');
-  var text2 = join(data2, '\n');
-  var text3 = join(data3, '\n');
-  var text4 = join(data4, '\n');
-  var text5 = join(data5, '\n');
+  var text1 = join(data[1], '\n');
+  var text2 = join(data[2], '\n');
+  var text3 = join(data[3], '\n');
+  var text4 = join(data[4], '\n');
+  var text5 = join(data[5], '\n');
 
-  keys1 = textAnalyze(text1).keys;
-  keys2 = textAnalyze(text2).keys;
-  keys3 = textAnalyze(text3).keys;
-  keys4 = textAnalyze(text4).keys;
-  keys5 = textAnalyze(text5).keys;
+  dataKeys[1] = textAnalyze(text1).keys;
+  dataKeys[2] = textAnalyze(text2).keys;
+  dataKeys[3] = textAnalyze(text3).keys;
+  dataKeys[4] = textAnalyze(text4).keys;
+  dataKeys[5] = textAnalyze(text5).keys;
   start = false;
   lose = false;
   win = false;
+  //randomStart[0] = createVector(random(windowWidth / 2 - 100, windowWidth / 2 + 100), random(windowHeight / 2 - 100, windowHeight / 2 + 100));
 }
 
 function buttonPressed() {
@@ -122,11 +125,10 @@ function wordInDoc(keys) {
   var allKeys = [];
   var duplicated = {};
   var concordance0 = {};
-
-  allKeys = keys1.concat(keys2);
-  allKeys = allKeys.concat(keys3);
-  allKeys = allKeys.concat(keys4);
-  allKeys = allKeys.concat(keys5);
+  allKeys = dataKeys[1].concat(dataKeys[2]);
+  allKeys = allKeys.concat(dataKeys[3]);
+  allKeys = allKeys.concat(dataKeys[4]);
+  allKeys = allKeys.concat(dataKeys[5]);
   allKeys = allKeys.concat(inputKeys);
 
   for (var i = 0; i < allKeys.length; i++) {
@@ -163,7 +165,6 @@ function get_tf_idf(keys, text) {
     return topWords[b] - topWords[a];
   });
   keys.length = worldSize;
-  //console.log(keys);
   return keys;
 }
 
@@ -178,8 +179,15 @@ function tf_idf(word, totalWords, totalDocs, wordDocs) {
 function draw() {
   background(255);
   smooth();
-  
-  //var randomStart[0] = createVector(random(150, windowWidth - 150), random(150, windowHeight - 150));
+  // var randomPos = (Math.round(Math.random()) * 2 - 1) * random(150, 250);
+  // if (randomStart.length <= worldSize - 1) {
+  //   var startPoint = createVector(randomStart[order].x + randomPos, randomStart[order].y + randomPos);
+  //   if (startPoint.x >= 150 && startPoint.x <= windowWidth - 150 && startPoint.y >= 50 && startPoint.y <= windowHeight - 50) {
+  //     randomStart.push(startPoint);
+  //     order++;
+  //   }
+  // }
+  //console.log(randomStart);
 
   if (start) {
     stroke(0, 0, 0, 120);
@@ -192,9 +200,8 @@ function draw() {
       from = color(0, 170, 255, 80);
       to = color(0, 255, 212, 80);
       var starColor = lerpColor(from, to, random(0.4, 1));
-      var newStar = new Star(inputFrequency[index], random(150, windowWidth - 150), random(150, windowHeight - 150), floor(random(0, 4)), starColor)
+      var newStar = new Star(inputFrequency[index], random(200, windowWidth - 200), random(150, windowHeight - 150), floor(random(0, 4)), starColor)
       index++;
-      //console.log(inputFrequency[index]);
       stars.push(newStar);
     }
     for (var i = 0; i < stars.length; i++) {
@@ -205,14 +212,12 @@ function draw() {
     player.control();
     player.show();
   }
-
   if (lose) {
     window.open("http://www.theguardian.com/teacher-network/2012/aug/16/a-level-student-success-failure");
     window.open("http://qideas.org/articles/the-value-of-failure/");
     window.open("http://ww2.kqed.org/mindshift/2015/08/12/what-do-students-lose-by-being-perfect-valuable-failure/");
     location.reload();
   }
-  
   if (win) {
     window.open("http://giphy.com/gifs/l4KhQo2MESJkc6QbS/html5");
     location.reload();
@@ -237,13 +242,15 @@ function Star(displayWord, xPos, yPos, mode, starColor) {
       this.starPos.y += this.s * cos(this.angle);
       this.angle += 0.01;
     } else if (mode == 1) {
-      this.s = this.starSize / 60;
+      this.s = this.starSize / 50;
+      this.starPos.x += this.s / 2 * sin(this.angle);
       this.starPos.y += this.s * cos(this.angle);
-      this.angle += 0.02;
-    } else if (mode == 2) {
-      this.s = this.starSize / 60;
-      this.starPos.x += this.s * sin(this.angle);
       this.angle += 0.03;
+    } else if (mode == 2) {
+      this.s = this.starSize / 30;
+      this.starPos.x += this.s * sin(this.angle);
+      this.starPos.y += this.s / 3 * cos(this.angle);
+      this.angle += 0.05;
     } else if (mode == 3) {
       this.s = this.starSize / 120;
       this.starPos.x += this.s * sin(this.angle);
@@ -303,7 +310,7 @@ function Player(posX, posY) {
       if (this.distances[i] <= 200 && this.distances[i] > this._starSize[i] / 2 + this.playerSize / 2) {
         this.playerPos.x = lerp(this.playerPos.x, this._starPos[i].x, this.amt[i]);
         this.playerPos.y = lerp(this.playerPos.y, this._starPos[i].y, this.amt[i]);
-      } else if (this.distances[i] <= this._starSize[i] / 2 + this.playerSize / 2) {
+      } else if (this.distances[i] <= this._starSize[i] / 2 + this.playerSize / 2 - 3) {
         //console.log("lost");
         lose = true;
       }
@@ -335,7 +342,6 @@ function Player(posX, posY) {
     stroke(0, 0, 0, 120);
     strokeWeight(2);
     noFill();
-    //ellipse(this.playerPos.x, this.playerPos.y, this.playerSize, this.playerSize);
     polygon(this.playerPos.x, this.playerPos.y, this.playerSize / 2, 5);
   }
 }
