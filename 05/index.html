@@ -191,11 +191,15 @@
 		function drawRegex() {
 			// var regex1 = /[a]/g;
 			var regexIn = document.getElementById("regexIn").value;
+			var regexTest = new RegExp(regexIn, 'g');
+			console.log(regexTest);
 
 			// question: when create a new regex from string, it adds "/\"
 			var flags = regexIn.replace(/.*\/([gimy]*)$/, '$1');
 			var pattern = regexIn.replace(new RegExp('^/(.*?)/'+flags+'$'), '$1');
 			var regex = new RegExp(pattern, flags);
+
+			console.log(regex);
 
 			var select = [];
 			for (var i = 0; i < containerSize.height; i++) {
@@ -222,16 +226,24 @@
 			}
 		}
 
+		function getInput(data) {
+			console.log("callback");
+		}
 
     </script>
+
 </head>
 <body>
 	<h1>Regex Drawing</h1>
 	<p>Enter a regex to test your input text. Submit to create a regex paintbrush and draw on the screen (try different speed). Default regex checks any words with "a". Press "space" to restart.</p>
 	<textarea id="regexIn" rows="4" cols="10">/[a]/g</textarea>
 	<textarea id="textIn" placeholder="Copy some text here 😏😏😏 (more than 70 words)" rows="4" cols="100"></textarea>
-	<!-- <button type="button" id="submitButton" onclick="getInput">submit</button> -->
+
+	<!-- <button type="button" id="submitButton" onclick="test()">submit</button> -->
+	
     <canvas id="canvas" resize style="background:white"></canvas>
+
+
 
 </body>
 </html>
