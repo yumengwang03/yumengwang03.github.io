@@ -14,7 +14,7 @@
 	color: #3FB;
 }
 
-.menu{
+/*.menu{
 	text-align: center;
 	margin: 50px;
 }
@@ -32,10 +32,11 @@
 
 .menu li:hover {
 	color: #F7F;
-}
+}*/
 
 .assignments {
 	padding: 10px 30%;
+	margin-left: 5%;
 }
 
 .assignments ul {
@@ -49,8 +50,6 @@
 .assignments li {
 	color: #A8A8A8;
 	font-size: 1.6em;
-	text-align: center;
-	color: #FA4;
 }
 
 .assignments li:hover {
