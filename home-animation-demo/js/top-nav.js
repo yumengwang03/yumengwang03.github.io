@@ -10,7 +10,7 @@
   <a href="" id="request-access-btn">request access</a>
  </div>
  <div class="col-1-4 main-logo">
-  <a href="http://www.wallplay.com"><img src="/assets/wallplay_main_logo.svg" alt="Wallplay Logo"></a>
+  <a href="http://www.wallplay.com"><img src="assets/wallplay_main_logo.svg" alt="Wallplay Logo"></a>
  </div>
  <div class="col-3-4" id="top-right-nav-bar">
   <div id="main-nav">
@@ -19,7 +19,7 @@
       <li><a href="http://www.wallplay.com/tech.html">tech</a></li>
       <li><a href="http://www.wallplay.com/space.html">space</a></li>
       <button class="border-btn" id="nav-collaborate-btn">collaborate</button>
-      <button id="nav-burger-btn"><img src="/assets/hamburger-open.svg" id="hamburger-img"></button>
+      <button id="nav-burger-btn"><img src="assets/top-nav-menu.svg" id="hamburger-img"></button>
     </ul>
   </div>
 </div>
@@ -27,7 +27,7 @@
   <script>
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       $("#nav-burger-btn").css('margin-top', '25px');
-    } //FIXES STRANGE BURGER MARGIN ISSUE - FIND ROOT OF ISSUE 
+    } //FIXES STRANGE BURGER MARGIN ISSUE - FIND ROOT OF ISSUE
   </script>
 
 <div id="login-form-container" class="closed-login wrap">
@@ -43,7 +43,7 @@
    </div>
    <div style="margin-top: 40px;"><button id="login-btn" class="border-btn">login</button></div>
    <div style="padding-left: 20px; margin-top: 40px; margin-right: 100px;">
-     <button style="background: transparent; border: solid 0px black; position: absolute; right: 35px; margin-top: 20px;" id="login-close-btn"><img src="/assets/hamburger-close.svg" id="login-x-out"></button>
+     <button style="background: transparent; border: solid 0px black; position: absolute; right: 35px; margin-top: 20px;" id="login-close-btn"><img src="assets/hamburger-close.svg" id="login-x-out"></button>
    </div>
   </form>
   </div>
@@ -88,70 +88,70 @@
 $("#user-menu-container").html(`
 <div id="user-menu" style="background-color: white;">
           <ul>
-            <li><img src="/assets/profile_img.png" height="150" width="150"></li>
+            <li><img src="assets/profile_img.png" height="150" width="150"></li>
 
             <li>
               <hr class="user-menu"><a href="">my profile</a>
               <hr class="user-menu">
             </li>
             <li>
-              <a href=""><img src="/assets/avatar.png" height="32" width="32" style="margin-left: -20px;"></a>
+              <a href=""><img src="assets/avatar.png" height="32" width="32" style="margin-left: -20px;"></a>
             </li>
             <li>
               <hr class="user-menu"><a href="">wishlist</a>
               <hr class="user-menu">
             </li>
             <li>
-              <a href=""><img src="/assets/heart.png" height="32" width="32" style="margin-left: -40px;"></a>
+              <a href=""><img src="assets/heart.png" height="32" width="32" style="margin-left: -40px;"></a>
             </li>
             <li>
               <hr class="user-menu"><a href="" id="logout-btn">logout</a>
               <hr class="user-menu">
             </li>
-            <li><img src="/assets/logout.png" height="32" width="32" style="margin-left: -40px;"></li>
+            <li><img src="assets/logout.png" height="32" width="32" style="margin-left: -40px;"></li>
             <li><button class="border-btn"><a href="">support</a></button></li>
           </ul>
         </div>
 `);
 $(document).ready(function() {
 
-    // $('#nav-container').hover(function(){ 
-    //     mouse_is_inside=true; 
+    // $('#nav-container').hover(function(){
+    //     mouse_is_inside=true;
     //     console.log("HOVER INSIDE NAV");
-    // }, function(){ 
-    //     mouse_is_inside=false; 
+    // }, function(){
+    //     mouse_is_inside=false;
     //     console.log("HOVER OUTSIDE NAV");
     // });
 
-    // $("body").mouseup(function(){ 
+    // $("body").mouseup(function(){
     //     if(! mouse_is_inside) {
     //       $(".side-nav-container").css('width', '0vw');
     //       $("#nav-burger-btn").removeClass("open-nav");
-    //       document.getElementById("hamburger-img").src = "/assets/hamburger-open.svg";
+    //       document.getElementById("hamburger-img").src = "assets/hamburger-open.svg";
     //       console.log("CLICK OUTSIDE NAV");
     //     } else {
     //         $("#nav-burger-btn").addClass("open-nav");
     //         console.log("CLICK INSIDE NAV");
     //     }
     // });
- 
+
     //OPENS THE SIDENAV FROM BURGER
   $("#nav-burger-btn").click(function() {
     if ($(this).hasClass("open-nav")) {
       $(".side-nav-container").css('width', '0vw');
-      document.getElementById("hamburger-img").src = "/assets/hamburger-open.svg";
+      document.getElementById("hamburger-img").src = "assets/top-nav-menu.svg";
       $("#nav-burger-btn").removeClass("open-nav");
       console.log("THE NAV BTN SHOULD CLOSE THE NAV");
     } else {
       $('.side-nav-container').animate({width: '260px'}, 50);
-      document.getElementById("hamburger-img").src = "/assets/hamburger-close.svg";
+      document.getElementById("hamburger-img").src = "assets/hamburger-close.svg";
       $("#nav-burger-btn").addClass("open-nav");
       var className = $('#nav-burger-btn').attr('class');
       console.log("THE NAV BTN SHOULD OPEN THE NAV");
       console.log("THE NAV BURGER HAS THE CLASS: " + className);
     }
   });
-    
+
     // OPENS THE COLLABORATE FORM
   $("#nav-collaborate-btn").click(function() {
     $("#collaborate-modal").slideToggle("fast");
@@ -195,7 +195,7 @@ $(document).ready(function() {
     });
     // SEND FORM TO CONNECT@WALLPLAY
         $.ajax({
-          url: "https://formspree.io/connect@wallplay.com", 
+          url: "https://formspree.io/connect@wallplay.com",
           method: "POST",
           data: {formType: formType, name: name, email: email, mediaForms: mediaForms,
                   website: website, socialLinks: socialLinks, videoLinks:videoLinks,
@@ -205,7 +205,7 @@ $(document).ready(function() {
       });
   });
 
-// TOGGLES THE LOGIN FORM  
+// TOGGLES THE LOGIN FORM
     $( "#toggle-login-btn" ).click(function() {
         event.preventDefault();
         if ($("#login-form-container").hasClass("closed-login")) {
@@ -250,7 +250,7 @@ $('#access-form').on('submit', function(event) {
     });
     // SEND FORM TO CONNECT@WALLPLAY
         $.ajax({
-          url: "https://formspree.io/connect@wallplay.com", 
+          url: "https://formspree.io/connect@wallplay.com",
           method: "POST",
           data: {formType: formType, name: name, email: email, company: company,
                   jobTitle: jobTitle, number: number, _subject: "New Access Form!"},
@@ -262,18 +262,18 @@ $('#access-form').on('submit', function(event) {
     // CLOSES THE LOGIN FORM
     $('#login-x-out').click(function() {
           event.preventDefault();
-        if ($("#login-form-container").hasClass("closed-login")) {          
+        if ($("#login-form-container").hasClass("closed-login")) {
           console.log("WHATEVER");
           $("#login-form-container").removeClass("closed-login");
-          $('#login-form-container').slideToggle("fast");                       
+          $('#login-form-container').slideToggle("fast");
         } else {
-          $('#login-form-container').slideToggle("fast");   
+          $('#login-form-container').slideToggle("fast");
 
-        }          
-        
+        }
+
     });
 
-  // TOGGLES THE PROFILE MENU    
+  // TOGGLES THE PROFILE MENU
     $( "#user-nav-img-btn" ).click(function() {
         if ($("#user-menu-container").hasClass("closed-user-menu")) {
           $('#user-menu-container').slideToggle("fast");
@@ -288,7 +288,7 @@ $('#access-form').on('submit', function(event) {
 
       var loginEmail = document.getElementById('login-email');
       var loginPass = document.getElementById('login-password');
-      var loginBtn = document.getElementById('login-btn');      
+      var loginBtn = document.getElementById('login-btn');
 
         loginBtn.addEventListener('click', e => {
           // get email & pass
@@ -300,7 +300,7 @@ $('#access-form').on('submit', function(event) {
           //
           event.preventDefault(loginBtn);
           console.log("SIGNING IN");
-          // IF ERROR, SHOW IN ALERT          
+          // IF ERROR, SHOW IN ALERT
           promise.catch(e => alert("Oh no! Looks like there's a problem: \n\n" + e.message + "\n\n"));
         });
 
@@ -313,11 +313,11 @@ $('#access-form').on('submit', function(event) {
         $('#nav-collaborate-btn').css('display', 'none');
         $('#login-nav-container').css('background', 'transparent');
         $('#login-form-container').css('border', '0px');
-        $('.animated-gradient').css('display', 'none');        
+        $('.animated-gradient').css('display', 'none');
         $('#nav-burger-btn').css('display', 'none');
         $('#nav-wrap').css('height', '90px');
         $('#user-nav').css('display', 'block');
-        $('.side-nav-container').css('display', 'none');        
+        $('.side-nav-container').css('display', 'none');
 
         // GET USER PROFILE
         var user = firebase.auth().currentUser;
@@ -328,7 +328,7 @@ $('#access-form').on('submit', function(event) {
         uid = user.uid;
 
         // SET USERNAME IN NAV BAR
-        var navUsername = document.getElementById('nav-username');                
+        var navUsername = document.getElementById('nav-username');
         navUsername.innerHTML = email;
       } else {
         console.log('not logged in');
@@ -339,7 +339,7 @@ $('#access-form').on('submit', function(event) {
 // FIREBASE LOGOUT HANDLING
   var logoutBtn = document.getElementById('logout-btn');
 
-  logoutBtn.addEventListener('click', e => {     
+  logoutBtn.addEventListener('click', e => {
     firebase.auth().signOut();
     console.log("SIGNING OUT");
   });
