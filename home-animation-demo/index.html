@@ -2,8 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Chain</title>
+    <title>Wallplay</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="favicon" href="favicon.ico"> -->
     <script type="text/javascript" src="js/paper-full.js"></script>
     <script type="text/paperscript" canvas="canvas">
 
@@ -19,7 +20,7 @@
                     stops: ['#52b1a2', '#fcc945']
                 },
                     origin: view.center - [240, 240],
-                    destination: view.center + [240, 240]
+                    destination: view.center + [500, 500]
                   },
             strokeWidth: 30,
             strokeCap: 'round'
@@ -40,37 +41,22 @@
             }
             path.smooth({ type: 'continuous' });
         }
-
-        // function onMouseDown(event) {
-        //     path.fullySelected = true;
-        //     path.strokeColor = '#e08285';
-        // }
-
-        // function onMouseUp(event) {
-        //     path.fullySelected = false;
-        //     path.strokeColor = '#e4141b';
-        // }
     </script>
 </head>
 <body>
-  <div class="main-section-title" style="position: absolute; margin-top: 200px; margin-left: 4%;">
-    <hr class="short-left-line">
-      <h1 >the experiential<br>arts network</h1>
-      <hr class="short-left-line bottom-31">
-  </div>
-  <div class="main-section-title" style="position: absolute; margin-top: 200px; margin-left: 4%;">
-      <h2 class="top-bottom-31" style="margin-top: 260px;">We connect artists, technology, spaces and curators with brands for cutting edge collaborations.</h2>
-  </div>
-    <canvas id="canvas" resize></canvas>
 
+    <canvas id="canvas" style="position:absolute;" resize></canvas>
 
-    <div class="wrap">
+    <div class="wrap" style="absolute;">
+      <!-- <canvas id="canvas" style="position:absolute;" resize></canvas> -->
         <div class="grid" id="nav-wrap"></div>
-        <div class="full-width-div" style="margin-top: 120px;">
+
+        <div class="full-width-div" style="margin-top: 100px;">
+          <!-- <img src="assets/wallplay_homepage-1.jpg" width="100%"> -->
             <div class="main-section-container">
                 <hr class="short-left-line">
                 <div class="main-section-title">
-                    <h1 >the experiential<br>arts network</h1>
+                    <h1>the experiential<br>arts network</h1>
                 </div>
                 <hr class="short-left-line bottom-31">
 
@@ -109,7 +95,7 @@
 
             <div class="flex-grid">
                 <div class="flex-grid-cell secondary-tagline">
-                    <a href="http://www.wallplay.com/artist/olivia-steele.html"><img class="rollover" src="/artist/olivia-steele/olivia-steele-thumb-off.jpg"></a>
+                    <a href="http://www.wallplay.com/artist/olivia-steele.html"><img class="rollover" src="artist/olivia-steele/olivia-steele-thumb-off.jpg"></a>
                     <h2>Olivia Steele</h2>
                     <p>light art, installation, sculpture</p>
                 </div>
@@ -154,7 +140,12 @@
 
         <div class="grid full-width-div top-31">
             <div class="col-1-1" id="splash-image">
-                <a href="http://www.wallplay.com/about.html"><img src="assets/home_mission.jpg" style="width: 100vw"></a>
+                <!-- <a href="http://www.wallplay.com/about.html"><img src="assets/home_mission.jpg" style="width: 100vw"></a> -->
+                <div class="main-section-container">
+                    <div class="main-section-title">
+                        <a href="http://www.wallplay.com/about.html" style="text-decoration: none; color: black;"><h1>Our mission is to facilitate the most <br>innovative collaborations in the <br>world and inspire brands to be <br>patrons of culture.</h1></a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -168,6 +159,8 @@
             </div>
         </div>
 
+
+
         <div class="grid">
             <div class="col-1-1">
                 <button class="lg-border-btn bottom-31" onclick="location.href='our-work.html'">view case studies</button>
@@ -176,7 +169,12 @@
 
         <div class="grid full-width-div">
             <div class="col-1-1" id="splash-image">
-                <a href="http://www.wallplay.com/about.html"><img src="assets/home_winwin.jpg" style="width: 100vw"></a>
+                <!-- <a href="http://www.wallplay.com/about.html"><img src="assets/home_winwin.jpg" style="width: 100vw"></a> -->
+                <div class="main-section-container">
+                    <div class="main-section-title">
+                        <a href="http://www.wallplay.com/about.html" style="text-decoration: none; color: black;"><h1>Creating win-win situations, filling <br>public spaces around the world<br>with extraordinary experiences that <br>build community.</h1></a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -192,6 +190,7 @@
             </div>
         </div>
 
+
         <div class="grid">
             <div class="col-1-1">
                 <button class="lg-border-btn top-31" onclick="location.href='space.html'">view spaces</button>
@@ -200,109 +199,113 @@
 
         <div class="grid full-width-div top-31">
             <div class="col-1-1" id="splash-image" style="margin-bottom: -3px;">
-                <a href="http://www.wallplay.com/about.html"><img src="assets/home_ecosystem.jpg" style="width: 100vw"></a>
+                <!-- <a href="http://www.wallplay.com/about.html"><img src="assets/home_ecosystem.jpg" style="width: 100vw"></a> -->
+                <div class="main-section-container">
+                    <div class="main-section-title">
+                        <a href="http://www.wallplay.com/about.html" style="text-decoration: none; color: black;"><h1>Building a thriving ecosystem<br> of artists, technologists, spaces <br>and brand partners for cutting-<br>edge collaborations that have <br>a positive impact.</h1></a>
+                    </div>
+                </div>
             </div>
         </div>
 
-
-      </div>
-      <footer class="grid full-width-div">
-          <div class="col-1-4">
-              <a href="http://www.wallplay.com"><img id="main-logo-footer" src="assets/wallplay_main_logo.svg" alt="Wallplay Logo"></a>
-          </div>
-
-          <div class="col-3-4 top-31">
-              <div id="gradient">
-                  <a href="http://www.wallplay.com"><img src="assets/footer_gradient.svg" id="gradient" alt="Wallplay Gradient"></a>
-              </div>
-              <ul id="footer-nav" style="margin-right:35px;">
-                  <hr class="footer-line">
-                  <li><a href="http://www.wallplay.com/about.html">about</a></li>
-                  <li id="form-intern-btn"><a id="form-intern-btn">internships</a></li>
-                  <li><a target="_blank" href="http://archive.wallplay.com">wallplay archive</a></li>
-              </ul>
-              <ul id="footer-nav">
-                  <hr class="footer-line">
-                  <li><a href="http://www.wallplay.com/our-work.html">case studies</a></li>
-                  <li><a><span id="footer-team-link">team</span> <span id="ew">|</span> <span id="footer-press-link">press</span></a></li>
-                  <li><a href="http://www.wallplay.com/contact.html">contact</a></li>
-
-              </ul>
-              <ul id="footer-nav">
-                  <hr class="footer-line">
-                  <li><a href="http://www.wallplay.com/talent">talent</a></li>
-                  <li><a href="http://www.wallplay.com/tech.html">tech</a></li>
-                  <li><a href="http://www.wallplay.com/space.html">space</a></li>
-              </ul>
-          </div>
-      </footer>
-      <div class="grid full-width-div subfooter">
-          <div class="flexcontainer" style="height: 100px;">
-              <div class="subfooter-email-flex secondary-tagline">
-                  <div id="subfooter-submission">
-                      <p style="margin-left: 31px; margin-top: 25px;">To attend events join our list:</p>
-                      <form id="subfooter-email-form">
-                          <input type="hidden" name="origin" id="origin" value="contact.html">
-                          <input type="email" name="contact-email" style="width: 55%;" id="contact-email" required>
-                          <input type="submit" name="submit" value="submit" style="margin-left: 30px; position: relative; bottom: 10px;">
-                      </form>
-                  </div>
-                  <div class="secondary-tagline" style="display:none;" id="subfooter_thankyou_message">
-                      <p style="margin-top: 45px; margin-left: 31px; color: #FF9F36;">Thanks for contacting us, we'll be in touch!</h2>
-                  </div>
-              </div>
-
-              <div class="subfooter-social-flex secondary-tagline" style="display: inline-flex; justify-content: space-around;">
-                  <p style="margin-top: 43px;">Visit us on:</p>
-                  <a target="_blank" href="https://www.artsy.net/wallplay"><img style=" margin-top: 34px;" src="assets/artsy-logo.png"></a>
-                  <a target="_blank" href="https://www.instagram.com/wallplayground"><img style="margin-top: 32px;" src="assets/ig-logo.png"></a>
-              </div>
-
-              <div class="subfooter-location-flex">
-                  <div class="secondary-tagline" style="display: inline;">
-                      <p style="text-align: right; margin-right: 85px; margin-top: 43px;">We are located at </p>
-                      <a target="_blank" href="http://www.newinc.org/">
-                          <img style="margin-left:3px; float: right; margin-top: -49px; margin-right: 31px;" src="assets/new-inc-logo.png" height="70" width="47"></a>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-      <div class="grid full-width-div secondary-tagline" id="legal-subfooter">
-          <p style="float: right; margin-top: 10px; margin-right: 31px;">&#174 All Rights Reserved, Wallplay 2017</p>
-      </div>
+    </div>
 
 
+    <footer class="grid full-width-div">
+        <div class="col-1-4">
+            <a href="http://www.wallplay.com"><img id="main-logo-footer" src="assets/wallplay_main_logo.svg" alt="Wallplay Logo"></a>
+        </div>
 
-      <!-- REQUEST ACCESS FORM -->
-      <div class="modal-bg" id="access-modal"></div>
-      <!--COLLABORATE FORM -->
-      <div class="modal-bg" id="collaborate-modal"></div>
-      <!--INTERN FORM -->
-      <div class="modal-bg" id="intern-modal-bg"></div>
+        <div class="col-3-4 top-31">
+            <div id="gradient">
+                <a href="http://www.wallplay.com"><img src="assets/footer_gradient.svg" id="gradient" alt="Wallplay Gradient"></a>
+            </div>
+            <ul id="footer-nav" style="margin-right:35px;">
+                <hr class="footer-line">
+                <li><a href="http://www.wallplay.com/about.html">about</a></li>
+                <li id="form-intern-btn"><a id="form-intern-btn">internships</a></li>
+                <li><a target="_blank" href="http://archive.wallplay.com">wallplay archive</a></li>
+            </ul>
+            <ul id="footer-nav">
+                <hr class="footer-line">
+                <li><a href="http://www.wallplay.com/our-work.html">case studies</a></li>
+                <li><a><span id="footer-team-link">team</span> <span id="ew">|</span> <span id="footer-press-link">press</span></a></li>
+                <li><a href="http://www.wallplay.com/contact.html">contact</a></li>
 
-      <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
-      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-      <!--   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-      <script src="js/fb-config.js"></script>
-      <script src="js/templates.js"></script>
-      <script src="js/animated-gradient.js"></script>
-      <script src="js/top-nav.js"></script>
-      <script src="js/img-rollover.js"></script>
-      <script src="js/intern-form.js"></script>
-      <script src="js/footer.js"></script>
-      <script src="js/sub-footer.js"></script>
-      <script type='text/javascript'>
-          window.__lo_site_id = 86641;
-          (function() {
-              var wa = document.createElement('script');
-              wa.type = 'text/javascript';
-              wa.async = true;
-              wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
-              var s = document.getElementsByTagName('script')[0];
-              s.parentNode.insertBefore(wa, s);
-          })();
-      </script>
+            </ul>
+            <ul id="footer-nav">
+                <hr class="footer-line">
+                <li><a href="http://www.wallplay.com/talent">talent</a></li>
+                <li><a href="http://www.wallplay.com/tech.html">tech</a></li>
+                <li><a href="http://www.wallplay.com/space.html">space</a></li>
+            </ul>
+        </div>
+    </footer>
+    <div class="grid full-width-div subfooter">
+        <div class="flexcontainer" style="height: 100px;">
+            <div class="subfooter-email-flex secondary-tagline">
+                <div id="subfooter-submission">
+                    <p style="margin-left: 31px; margin-top: 25px;">To attend events join our list:</p>
+                    <form id="subfooter-email-form">
+                        <input type="hidden" name="origin" id="origin" value="contact.html">
+                        <input type="email" name="contact-email" style="width: 55%;" id="contact-email" required>
+                        <input type="submit" name="submit" value="submit" style="margin-left: 30px; position: relative; bottom: 10px;">
+                    </form>
+                </div>
+                <div class="secondary-tagline" style="display:none;" id="subfooter_thankyou_message">
+                    <p style="margin-top: 45px; margin-left: 31px; color: #FF9F36;">Thanks for contacting us, we'll be in touch!</h2>
+                </div>
+            </div>
+
+            <div class="subfooter-social-flex secondary-tagline" style="display: inline-flex; justify-content: space-around;">
+                <p style="margin-top: 43px;">Visit us on:</p>
+                <a target="_blank" href="https://www.artsy.net/wallplay"><img style=" margin-top: 34px;" src="assets/artsy-logo.png"></a>
+                <a target="_blank" href="https://www.instagram.com/wallplayground"><img style="margin-top: 32px;" src="assets/ig-logo.png"></a>
+            </div>
+
+            <div class="subfooter-location-flex">
+                <div class="secondary-tagline" style="display: inline;">
+                    <p style="text-align: right; margin-right: 85px; margin-top: 43px;">We are located at </p>
+                    <a target="_blank" href="http://www.newinc.org/">
+                        <img style="margin-left:3px; float: right; margin-top: -49px; margin-right: 31px;" src="assets/new-inc-logo.png" height="70" width="47"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid full-width-div secondary-tagline" id="legal-subfooter">
+        <p style="float: right; margin-top: 10px; margin-right: 31px;">&#174 All Rights Reserved, Wallplay 2017</p>
+    </div>
+
+    <!-- REQUEST ACCESS FORM -->
+    <div class="modal-bg" id="access-modal"></div>
+    <!--COLLABORATE FORM -->
+    <div class="modal-bg" id="collaborate-modal"></div>
+    <!--INTERN FORM -->
+    <div class="modal-bg" id="intern-modal-bg"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!--   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    <script src="js/fb-config.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/animated-gradient.js"></script>
+    <script src="js/top-nav.js"></script>
+    <script src="js/img-rollover.js"></script>
+    <script src="js/intern-form.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/sub-footer.js"></script>
+    <script type='text/javascript'>
+        window.__lo_site_id = 86641;
+        (function() {
+            var wa = document.createElement('script');
+            wa.type = 'text/javascript';
+            wa.async = true;
+            wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wa, s);
+        })();
+    </script>
 
 </body>
 </html>
