@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>wallplay experiential</title>
+    <link rel="stylesheet" type='text/css' media='all' href="/css/base.css">
+
+  <style>
+body, html {
+    height: 100%;
+}
+
+#title-card {
+    /* The image used */
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2)
+    ), url('/artist/olivia-steele/olivia-steele-project-3-1.jpg');
+    overflow: scroll;
+}
+
+#card-two {
+    /* The image used */
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2)
+    ), url('/artist/olivia-steele/olivia-steele-project-3-2.jpg');
+    overflow: scroll;
+}
+
+#card-three {
+    /* The image used */
+    background-image: url('/artist/olivia-steele/olivia-steele-project-3-3.jpg');
+    overflow: scroll;
+}
+
+#card-four {
+    /* The image used */
+    background-image: url('/artist/olivia-steele/olivia-steele-project-3-4.jpg');
+    overflow: scroll;
+}
+
+
+
+
+
+        
+    @media only screen and (max-device-width: 1024px) {
+    .full-height-card {
+        background-attachment: scroll;
+    }
+}
+  </style>
+
+</head>
+
+<body>
+  <div id="title-card" class="full-height-card">
+    <div id="x-placeholder" style="height: 80px;">
+    <a href="http://www.wallplay.com/artist/olivia-steele.html" class="sticker" id="x-out" style="width: 1510px; position: fixed; top: 20px; z-index: auto;"><img src="/assets/x_orange.svg" height="78" width="78"></a>
+     </div> 
+
+
+      <div class="med-tagline vert-center-text-container" style="margin-left: 20px;">
+      <hr class="wp_hr"> 
+      <h1 class="title-text top-31">Olivia Steele</h1>
+      <h1 class= "title-text">PDA: Public Display of Awareness</h1>
+      
+      <hr class="wp_hr">
+      <p class="sub-title-text practice" style="margin-bottom: 0px;">International, Ongoing</p>
+      <hr class="wp_hr">
+        <span class="content-center" >
+          <a href="#card-two"><img src="/assets/down_arrow.svg" class="down_arrow"></a>
+        </span>
+    </div>
+  </div>
+  
+  <div id="card-two" class="full-height-card all-center-text-container">
+        <div style="width: 90%">
+        <h1 class="slide-tagline" style="color: white">
+        <div style="margin-top:5%; line-height: 0rem;">"Art is only real when shared.”</div>
+        <br/>
+        —Olivia Steele
+        <br />
+        <div style="font-size: 32px; margin: 5% 0; line-height:4rem">
+          If you were waiting for a sign, this is it. This public art project aims to employ typical methods of industrial road signage to signal its viewers in the most unexpected ways. Aluminum signs, marquee letter boards, and neon will loan themselves to a various kinds of direction. 
+        </div>
+      </h1>
+      </div>
+  </div>
+
+  <div id="card-three" class="full-height-card">
+  <!-- EW,WEIRD HACK: PUTTING BOTTOM TEXT DIV IN 4TH SLIDE TO DISPLAY IN THIRD --> 
+  <div style="width: 90%">
+        <h2 class="slide-tagline" style="color: white;
+            font-size: 48px;
+            line-height: 6rem;
+            margin-top: 10%;
+            margin-left: 5%;">
+ These conceptual signs foster the ethos of global consciousness with words of wisdom, connected statements, and enlightening mantras that promote positive thought and inspire inner dialogue. 
+        </h2>
+  </div>
+    <div id="subline-section">
+      <h2 class="subline-title">&nbsp;&nbsp;collaborators <span class="wp_orange_text">|</span>
+      <span class="subline-text practice"> </span></h2>
+    </div>
+  <!-- EW, WEIRD HACK: PUTTING BOTTOM TEXT DIV IN 4TH SLIDE TO DISPLAY IN THIRD -->         
+  </div>
+
+  <div id="card-four" class="full-height-card">
+    <div style="width: 90%">
+        <h2 class="slide-tagline" style="color: white;
+          margin-left: 5%;
+          margin-top: 7%; 
+          margin-bottom: 7%;
+          font-size: 38px; line-height: 5rem;
+        ">Public art in its purest form, these signs are meant for everyone. Powerful statements using simple language, is placed on bright signs for all to heed. It is the intent that everyone on their unique journey will have an opportunity to be touched by an unexpected message. 
+        <br /><br />
+        These subliminal artworks become beacons, filling the roadside with reflective sculptures and enlightening reminders. All people, no matter how divergent their concerns, and no matter how disconnected their lives may be, will be able to experience and perhaps, find inspiration in it.
+        </h2>
+      </div>
+    </div> 
+
+  <!-- WEIRD HACK: PUTTING BOTTOM TEXT DIV IN 4TH SLIDE TO DISPLAY IN THIRD --> 
+<!--     <div id="subline-section">
+      <h2 class="subline-title">&nbsp;&nbsp;collaborators <span class="wp_orange_text">|</span><span class="subline-text practice"> Print All Over Me, This is Chorus, Dice Kayek</span></h2>
+    </div> -->
+  <!-- WEIRD HACK: PUTTING BOTTOM TEXT DIV IN 4TH SLIDE TO DISPLAY IN THIRD -->         
+  
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <script src="/js/jquery.sticky.js"></script>
+
+ <script>
+  $(document).ready(function(){
+    $(".sticker").sticky({topSpacing: 20});
+  });
+</script>
+
+
+</body>
+</html>
